@@ -249,7 +249,7 @@ static SessionHelperSingleton *sharedData_ = nil;
 // Remote peer changed state
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
-    NSLog(@"%s", __func__);
+    //NSLog(@"%s", __func__);
     if (state == MCSessionStateConnected){
         _connectedPeerID = peerID;
         [self.delegate sessionConnected];
@@ -270,6 +270,15 @@ static SessionHelperSingleton *sharedData_ = nil;
         [baseView presentViewController:alertController animated:YES completion:nil];
 
     }
+    else{
+        NSLog(@"%s", __func__);
+//sbremoveObject:peerID;
+        
+    }
+}
+
+- (void)terminate{
+    sharedData_ = nil;
 }
 
 @end

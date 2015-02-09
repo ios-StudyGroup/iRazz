@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1ADA99B8-96D7-4790-9B29-FE9261D22186</string>
+	<key>IDESourceControlProjectName</key>
+	<string>iRazzP2P</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>076538578364331BA27BA7D1AD0F2BCB5E2C676D</key>
+		<string>https://github.com/ios-StudyGroup/iRazz.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iRazzP2P/iRazzP2P.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>076538578364331BA27BA7D1AD0F2BCB5E2C676D</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ios-StudyGroup/iRazz.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>076538578364331BA27BA7D1AD0F2BCB5E2C676D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>076538578364331BA27BA7D1AD0F2BCB5E2C676D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iRazz</string>
+		</dict>
+	</array>
+</dict>
+</plist>

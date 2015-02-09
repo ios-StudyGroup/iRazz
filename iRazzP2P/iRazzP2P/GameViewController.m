@@ -63,9 +63,17 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     NSLog(@"%s", __func__);
+    //[SessionHelperSingleton sharedManager].delegate = self;
+    //[self startView];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"%s", __func__);
     [SessionHelperSingleton sharedManager].delegate = self;
     [self startView];
 }
+
 
 - (IBAction)dealButtonClick:(id)sender {
     NSLog(@"%s", __func__);
