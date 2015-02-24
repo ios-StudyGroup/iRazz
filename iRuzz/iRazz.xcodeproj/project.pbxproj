@@ -22,24 +22,9 @@
 		6CA9B07319961EEA00A584E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B07119961EEA00A584E6 /* Main.storyboard */; };
 		6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B07519961EEA00A584E6 /* RazzViewController.m */; };
 		6CA9B07819961EEA00A584E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B07719961EEA00A584E6 /* Images.xcassets */; };
-		6CA9B07F19961EEA00A584E6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA9B07E19961EEA00A584E6 /* XCTest.framework */; };
-		6CA9B08019961EEA00A584E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA9B05F19961EEA00A584E6 /* Foundation.framework */; };
-		6CA9B08119961EEA00A584E6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA9B06319961EEA00A584E6 /* UIKit.framework */; };
-		6CA9B08919961EEA00A584E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B08719961EEA00A584E6 /* InfoPlist.strings */; };
-		6CA9B08B19961EEA00A584E6 /* iRazzTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B08A19961EEA00A584E6 /* iRazzTests.m */; };
 		6CA9B0951996310400A584E6 /* table.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B0941996310400A584E6 /* table.png */; };
 		6CA9B098199636AA00A584E6 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B097199636AA00A584E6 /* GameViewController.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		6CA9B08219961EEA00A584E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6CA9B05419961EEA00A584E6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6CA9B05B19961EEA00A584E6;
-			remoteInfo = iRuzz;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6A31971119B6989700AAD4DE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -67,7 +52,6 @@
 		6CA9B07419961EEA00A584E6 /* RazzViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RazzViewController.h; sourceTree = "<group>"; };
 		6CA9B07519961EEA00A584E6 /* RazzViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RazzViewController.m; sourceTree = "<group>"; };
 		6CA9B07719961EEA00A584E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		6CA9B07D19961EEA00A584E6 /* iRazzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iRazzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CA9B07E19961EEA00A584E6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6CA9B08619961EEA00A584E6 /* iRazzTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iRazzTests-Info.plist"; sourceTree = "<group>"; };
 		6CA9B08819961EEA00A584E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -89,16 +73,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6CA9B07A19961EEA00A584E6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6CA9B07F19961EEA00A584E6 /* XCTest.framework in Frameworks */,
-				6CA9B08119961EEA00A584E6 /* UIKit.framework in Frameworks */,
-				6CA9B08019961EEA00A584E6 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -116,7 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				6CA9B05C19961EEA00A584E6 /* iRazz.app */,
-				6CA9B07D19961EEA00A584E6 /* iRazzTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,24 +184,6 @@
 			productReference = 6CA9B05C19961EEA00A584E6 /* iRazz.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6CA9B07C19961EEA00A584E6 /* iRazzTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6CA9B09119961EEA00A584E6 /* Build configuration list for PBXNativeTarget "iRazzTests" */;
-			buildPhases = (
-				6CA9B07919961EEA00A584E6 /* Sources */,
-				6CA9B07A19961EEA00A584E6 /* Frameworks */,
-				6CA9B07B19961EEA00A584E6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6CA9B08319961EEA00A584E6 /* PBXTargetDependency */,
-			);
-			name = iRazzTests;
-			productName = iRuzzTests;
-			productReference = 6CA9B07D19961EEA00A584E6 /* iRazzTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -241,9 +196,6 @@
 				TargetAttributes = {
 					6CA9B05B19961EEA00A584E6 = {
 						DevelopmentTeam = 2473VK4WC2;
-					};
-					6CA9B07C19961EEA00A584E6 = {
-						TestTargetID = 6CA9B05B19961EEA00A584E6;
 					};
 				};
 			};
@@ -261,7 +213,6 @@
 			projectRoot = "";
 			targets = (
 				6CA9B05B19961EEA00A584E6 /* iRazz */,
-				6CA9B07C19961EEA00A584E6 /* iRazzTests */,
 			);
 		};
 /* End PBXProject section */
@@ -275,14 +226,6 @@
 				6CA9B07819961EEA00A584E6 /* Images.xcassets in Resources */,
 				6CA9B06A19961EEA00A584E6 /* InfoPlist.strings in Resources */,
 				6CA9B07319961EEA00A584E6 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6CA9B07B19961EEA00A584E6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6CA9B08919961EEA00A584E6 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,23 +248,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6CA9B07919961EEA00A584E6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6CA9B08B19961EEA00A584E6 /* iRazzTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6CA9B08319961EEA00A584E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6CA9B05B19961EEA00A584E6 /* iRazz */;
-			targetProxy = 6CA9B08219961EEA00A584E6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6CA9B06819961EEA00A584E6 /* InfoPlist.strings */ = {
@@ -459,46 +386,6 @@
 			};
 			name = Release;
 		};
-		6CA9B09219961EEA00A584E6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iRazz.app/iRazz";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "iRuzz-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "iRuzzTests/iRazzTests-Info.plist";
-				PRODUCT_NAME = iRazzTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		6CA9B09319961EEA00A584E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iRazz.app/iRazz";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "iRuzz-Prefix.pch";
-				INFOPLIST_FILE = "iRuzzTests/iRazzTests-Info.plist";
-				PRODUCT_NAME = iRazzTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -516,15 +403,6 @@
 			buildConfigurations = (
 				6CA9B08F19961EEA00A584E6 /* Debug */,
 				6CA9B09019961EEA00A584E6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6CA9B09119961EEA00A584E6 /* Build configuration list for PBXNativeTarget "iRazzTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6CA9B09219961EEA00A584E6 /* Debug */,
-				6CA9B09319961EEA00A584E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
