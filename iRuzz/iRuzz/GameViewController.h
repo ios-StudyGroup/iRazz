@@ -15,6 +15,7 @@
 @interface GameViewController : UIViewController
 
 @property (strong, nonatomic) Deck *deck;
+@property BOOL isHost;
 @property (weak, nonatomic) IBOutlet UILabel *a_card1;
 @property (weak, nonatomic) IBOutlet UILabel *a_card2;
 @property (weak, nonatomic) IBOutlet UILabel *a_card3;

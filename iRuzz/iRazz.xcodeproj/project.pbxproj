@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6A31971219B6989700AAD4DE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A31971119B6989700AAD4DE /* QuartzCore.framework */; };
+		6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */; };
+		6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A41D2EA1A9C92B200376C76 /* ConnectViewController.m */; };
 		6A459B5519D2A2E1007EBC93 /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A459B5419D2A2E1007EBC93 /* Deck.m */; };
 		6A66122919B0860F00CC3FB9 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A66122819B0860F00CC3FB9 /* Card.m */; };
 		6A77EAD519B873EB0085CA6C /* RazzHand.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A77EAD419B873EB0085CA6C /* RazzHand.m */; };
@@ -41,6 +43,10 @@
 
 /* Begin PBXFileReference section */
 		6A31971119B6989700AAD4DE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionHelperSingleton.m; sourceTree = "<group>"; };
+		6A41D2E81A9C8B8900376C76 /* SessionHelperSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionHelperSingleton.h; sourceTree = "<group>"; };
+		6A41D2E91A9C92B200376C76 /* ConnectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController.h; sourceTree = "<group>"; };
+		6A41D2EA1A9C92B200376C76 /* ConnectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController.m; sourceTree = "<group>"; };
 		6A459B5319D2A2E1007EBC93 /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deck.h; sourceTree = "<group>"; };
 		6A459B5419D2A2E1007EBC93 /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deck.m; sourceTree = "<group>"; };
 		6A66122719B0860F00CC3FB9 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
@@ -134,6 +140,8 @@
 				6CA9B06E19961EEA00A584E6 /* RazzAppDelegate.h */,
 				6CA9B06F19961EEA00A584E6 /* RazzAppDelegate.m */,
 				6CA9B07119961EEA00A584E6 /* Main.storyboard */,
+				6A41D2E81A9C8B8900376C76 /* SessionHelperSingleton.h */,
+				6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */,
 				6CA9B07419961EEA00A584E6 /* RazzViewController.h */,
 				6CA9B07519961EEA00A584E6 /* RazzViewController.m */,
 				6CA9B07719961EEA00A584E6 /* Images.xcassets */,
@@ -146,6 +154,8 @@
 				6A459B5419D2A2E1007EBC93 /* Deck.m */,
 				6A77EAD319B873EB0085CA6C /* RazzHand.h */,
 				6A77EAD419B873EB0085CA6C /* RazzHand.m */,
+				6A41D2E91A9C92B200376C76 /* ConnectViewController.h */,
+				6A41D2EA1A9C92B200376C76 /* ConnectViewController.m */,
 			);
 			name = iRazz;
 			path = iRuzz;
@@ -285,7 +295,9 @@
 			files = (
 				6A66122919B0860F00CC3FB9 /* Card.m in Sources */,
 				6A459B5519D2A2E1007EBC93 /* Deck.m in Sources */,
+				6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */,
 				6CA9B098199636AA00A584E6 /* GameViewController.m in Sources */,
+				6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */,
 				6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */,
 				6CA9B06C19961EEA00A584E6 /* main.m in Sources */,
 				6CA9B07019961EEA00A584E6 /* RazzAppDelegate.m in Sources */,
@@ -416,13 +428,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 亮 井上 (U53WUJELF3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iRuzz/iRazz-Prefix.pch";
 				INFOPLIST_FILE = "iRuzz/iRazz-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PRODUCT_NAME = iRazz;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -432,13 +446,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 亮 井上 (U53WUJELF3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iRuzz/iRazz-Prefix.pch";
 				INFOPLIST_FILE = "iRuzz/iRazz-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PRODUCT_NAME = iRazz;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -446,14 +462,14 @@
 		6CA9B09219961EEA00A584E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iRuzz.app/iRuzz";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iRazz.app/iRazz";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "iRuzz/iRuzz-Prefix.pch";
+				GCC_PREFIX_HEADER = "iRuzz-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -468,14 +484,14 @@
 		6CA9B09319961EEA00A584E6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iRuzz.app/iRuzz";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iRazz.app/iRazz";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "iRuzz/iRuzz-Prefix.pch";
+				GCC_PREFIX_HEADER = "iRuzz-Prefix.pch";
 				INFOPLIST_FILE = "iRuzzTests/iRazzTests-Info.plist";
 				PRODUCT_NAME = iRazzTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
