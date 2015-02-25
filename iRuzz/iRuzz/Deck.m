@@ -10,6 +10,7 @@
 
 @implementation Deck
 
+
 - (id)init
 {
     self = [super init];
@@ -52,4 +53,20 @@
     return [self.deck objectAtIndex:atIndex];
 }
 
+
+//アーカイブされたファイルからオブジェクトの状態を復元するときに呼ばれるメソッド
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if (self) {
+        self.deck = [decoder decodeObjectForKey:@"deck"];
+    }
+    return self;
+}
+
+//オブジェクトをアーカイブするときに呼ばれるメソッド
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.deck forKey:@"deck"];
+}
 @end

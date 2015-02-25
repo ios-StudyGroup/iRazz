@@ -142,12 +142,15 @@
         // カードを生成
         self.deck = [[Deck alloc] init];
         
-        [[SessionHelperSingleton sharedManager] sendDeck:self.deck];
+        [[SessionHelperSingleton sharedManager] sendDeck:[NSKeyedArchiver archivedDataWithRootObject:self.deck]];
     }
+    [self.view setNeedsDisplay];
+    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
+
     
     
 }
--(void)receivedDeck:(NSArray *)deck
+-(void)receivedDeck:(Deck *)deck
 {
     NSLog(@"%s",__func__);
     
@@ -156,7 +159,10 @@
     
     [self.gameStartButton setTitle:@"ゲーム開始" forState:UIControlStateNormal];
     self.gameStartButton.enabled = YES;
-    self.deck = [deck mutableCopy];
+    self.deck = deck;
+    [self.view setNeedsDisplay];
+    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
+
     
 }
 

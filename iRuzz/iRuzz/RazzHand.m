@@ -49,13 +49,13 @@ int int_sort( const void * a , const void * b ) {
         return -1;
     }
 
-    int count = [handA count];
+    int count = (int)[handA count];
     for (int i = 0; i < count; i++) {
         Card *tmp;
         tmp = (Card *)[handA objectAtIndex:i];
-        handAOfR[i] = tmp.rank;
+        handAOfR[i] = (int)tmp.rank;
         tmp = (Card *)[handB objectAtIndex:i];
-        handBOfR[i] = tmp.rank;
+        handBOfR[i] = (int)tmp.rank;
     }
     NSLog(@"Before");
     NSLog(@"handA=%2d,%2d,%2d,%2d,%2d,%2d,%2d\n", handAOfR[0], handAOfR[1], handAOfR[2], handAOfR[3], handAOfR[4], handAOfR[5], handAOfR[6]);
@@ -87,8 +87,8 @@ int int_sort( const void * a , const void * b ) {
     NSInteger hp5_handA = hp7ToHp5[hp7_handA];
     NSInteger hp5_handB = hp7ToHp5[hp7_handB];
     
-    NSLog(@"hp7_handA=%2d hp5_handA=%2d", hp7_handA, hp5_handA);
-    NSLog(@"hp7_handB=%2d hp5_handB=%2d", hp7_handB, hp5_handB);
+    NSLog(@"hp7_handA=%2ld hp5_handA=%2ld", (long)hp7_handA, (long)hp5_handA);
+    NSLog(@"hp7_handB=%2ld hp5_handB=%2ld", (long)hp7_handB, (long)hp5_handB);
     
     if (hp5_handA > hp5_handB) {
         return 1;

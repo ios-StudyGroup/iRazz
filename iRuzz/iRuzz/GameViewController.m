@@ -297,7 +297,7 @@
 {
     NSInteger potPrize = self.pot.text.integerValue;
     potPrize = potPrize + self.y_bet.text.integerValue + self.a_bet.text.integerValue;
-    self.pot.text = [NSString stringWithFormat:@"%d", potPrize];
+    self.pot.text = [NSString stringWithFormat:@"%ld", (long)potPrize];
     self.y_bet.text = @"0";
     self.a_bet.text = @"0";
 }

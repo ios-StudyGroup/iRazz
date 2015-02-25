@@ -36,7 +36,7 @@
         
         NSString *rank;
         if ((self.rank >= 2) && (self.rank <= 9)) {
-            rank = [NSString stringWithFormat:@"%d", self.rank];
+            rank = [NSString stringWithFormat:@"%ld", (long)self.rank];
         } else if (self.rank == 1) {
             rank = @"A";
         } else if (self.rank == 10) {
@@ -106,6 +106,27 @@
         }
     }
     return 0;
+}
+
+
+//アーカイブされたファイルからオブジェクトの状態を復元するときに呼ばれるメソッド
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if (self) {
+        self.displayString = [decoder decodeObjectForKey:@"displayString"];
+        self.rank = [decoder decodeIntForKey:@"rank"];
+        self.suit = [decoder decodeIntForKey:@"suit"];
+    }
+    return self;
+}
+
+//オブジェクトをアーカイブするときに呼ばれるメソッド
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.displayString forKey:@"displayString"];
+    [encoder encodeInt:(int)self.rank forKey:@"rank"];
+    [encoder encodeInt:(int)self.suit forKey:@"suit"];
 }
 
 @end

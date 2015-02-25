@@ -10,7 +10,7 @@
 
 #import "RazzHand.h"
 
-@interface Card : NSObject
+@interface Card : NSObject<NSCoding>
 {
     NSString *_displayValue;
     NSInteger _rank;

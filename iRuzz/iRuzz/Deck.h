@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Card.h"
 
-@interface Deck : NSObject
+@interface Deck : NSObject<NSCoding>
 
 #define DECK_SIZE 52 /* 52枚 */
 

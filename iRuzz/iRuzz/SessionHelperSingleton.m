@@ -82,7 +82,7 @@ static SessionHelperSingleton *sharedData_ = nil;
     }
 }
 
--(void)sendDeck:(NSArray *)deck
+-(void)sendDeck:(NSData *)deck
 {
     NSDictionary *deck_dir = @{@"deck":deck};
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:deck_dir];
@@ -220,8 +220,10 @@ static SessionHelperSingleton *sharedData_ = nil;
     if (([reverse objectForKey:@"uuid"] != nil) == TRUE){
 
     }else if ((([reverse objectForKey:@"deck"] != nil) == TRUE)){ // deck
-        NSArray *deck = reverse[@"deck"];
-        [self.delegate receivedDeck:deck];
+        NSData *data = reverse[@"deck"];
+        
+        
+        [self.delegate receivedDeck:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
 
     }else if ((([reverse objectForKey:@"message"] != nil) == TRUE)){
         NSString *message = reverse[@"message"];

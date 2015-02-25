@@ -10,6 +10,7 @@
 @import MultipeerConnectivity;
 
 
+@class Deck;
 @protocol SessionHelperDelegate <NSObject>
 
 // SessionHelperDelegateで実装が必須なメソッド
@@ -17,7 +18,7 @@
 
 @optional
 -(void)sessionConnected;
--(void)receivedDeck:(NSArray *)deck;
+-(void)receivedDeck:(Deck *)deck;
 -(void)receivedMessage:(NSString *)message;
 
 @end
@@ -43,7 +44,7 @@
 - (void)startBrowsiongWithDisplayName:(NSString *)displayName;
 - (void)startAdvertisingWithDisplayName:(NSString *)displayName;
 
--(void)sendDeck:(NSArray *)deck;
+-(void)sendDeck:(NSData *)deck;
 -(void)sendMessage:(NSString *)message;
 
 
