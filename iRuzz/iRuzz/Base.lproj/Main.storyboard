@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
@@ -120,7 +120,7 @@ bet, raise max: 1bet,1raise</string>
                                 </state>
                                 <connections>
                                     <action selector="gameStartButtonClick:" destination="f52-bf-W2J" eventType="touchUpInside" id="Lqe-Bq-OWv"/>
-                                    <segue destination="BPX-tv-2lp" kind="modal" id="N7L-Kw-pyX"/>
+                                    <segue destination="BPX-tv-2lp" kind="modal" identifier="PushGameStart" id="N7L-Kw-pyX"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -351,6 +351,6 @@ bet, raise max: 1bet,1raise</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="kwv-ec-xZZ"/>
+        <segue reference="N7L-Kw-pyX"/>
     </inferredMetricsTieBreakers>
 </document>
