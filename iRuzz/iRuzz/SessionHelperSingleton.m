@@ -227,7 +227,10 @@ static SessionHelperSingleton *sharedData_ = nil;
 
     }else if ((([reverse objectForKey:@"message"] != nil) == TRUE)){
         NSString *message = reverse[@"message"];
-        [self.delegate receivedMessage:message];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate receivedMessage:message];
+        });
     }
 }
 
@@ -255,7 +258,13 @@ static SessionHelperSingleton *sharedData_ = nil;
     //NSLog(@"%s", __func__);
     if (state == MCSessionStateConnected){
         _connectedPeerID = peerID;
-        [self.delegate sessionConnected];
+        
+        // メインスレッドで処理を実行
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 他のピアの接続状態が変化したことをViewControllerに通知
+            [self.delegate sessionConnected];
+        });
+        
     }else if (state == MCSessionStateNotConnected){
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー"
                                                                                  message:@"接続が切れた"

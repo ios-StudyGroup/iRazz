@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2AC74CC51AA0C0D1004BF0F6 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AC74CC31AA0C0D1004BF0F6 /* Main_iPhone.storyboard */; };
 		6A31971219B6989700AAD4DE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A31971119B6989700AAD4DE /* QuartzCore.framework */; };
 		6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */; };
 		6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A41D2EA1A9C92B200376C76 /* ConnectViewController.m */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2AC74CC41AA0C0D1004BF0F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		6A31971119B6989700AAD4DE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionHelperSingleton.m; sourceTree = "<group>"; };
 		6A41D2E81A9C8B8900376C76 /* SessionHelperSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionHelperSingleton.h; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				6CA9B06E19961EEA00A584E6 /* RazzAppDelegate.h */,
 				6CA9B06F19961EEA00A584E6 /* RazzAppDelegate.m */,
 				6CA9B07119961EEA00A584E6 /* Main.storyboard */,
+				2AC74CC31AA0C0D1004BF0F6 /* Main_iPhone.storyboard */,
 				6A41D2E81A9C8B8900376C76 /* SessionHelperSingleton.h */,
 				6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */,
 				6CA9B07419961EEA00A584E6 /* RazzViewController.h */,
@@ -195,7 +198,7 @@
 				ORGANIZATIONNAME = cat;
 				TargetAttributes = {
 					6CA9B05B19961EEA00A584E6 = {
-						DevelopmentTeam = 2473VK4WC2;
+						DevelopmentTeam = 595NV2ANZW;
 					};
 				};
 			};
@@ -224,6 +227,7 @@
 			files = (
 				6CA9B0951996310400A584E6 /* table.png in Resources */,
 				6CA9B07819961EEA00A584E6 /* Images.xcassets in Resources */,
+				2AC74CC51AA0C0D1004BF0F6 /* Main_iPhone.storyboard in Resources */,
 				6CA9B06A19961EEA00A584E6 /* InfoPlist.strings in Resources */,
 				6CA9B07319961EEA00A584E6 /* Main.storyboard in Resources */,
 			);
@@ -251,6 +255,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		2AC74CC31AA0C0D1004BF0F6 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2AC74CC41AA0C0D1004BF0F6 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
 		6CA9B06819961EEA00A584E6 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -363,7 +375,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PRODUCT_NAME = iRazz;
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -381,7 +393,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PRODUCT_NAME = iRazz;
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
