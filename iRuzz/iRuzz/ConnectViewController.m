@@ -125,7 +125,27 @@
 }
 
 
+-(void)hogehoge
+{
+    NSLog(@"%s", __func__);
 
+    [self.gameStartButton setTitle:@"ゲーム開始" forState:UIControlStateNormal];
+    self.gameStartButton.enabled = YES;
+    
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"UIAlertControllerStyle.Alert" message:@"iOS8" preferredStyle:UIAlertControllerStyleAlert];
+    
+    // addActionした順に左から右にボタンが配置されます
+    [alertController addAction:[UIAlertAction actionWithTitle:@"はい" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        // otherボタンが押された時の処理
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"いいえ" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        // cancelボタンが押された時の処理
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+}
 
 # pragma mark - SessionHelperDelegate methods
 -(void)sessionConnected{
@@ -144,11 +164,14 @@
         
         [[SessionHelperSingleton sharedManager] sendDeck:[NSKeyedArchiver archivedDataWithRootObject:self.deck]];
     }
-    [self.view setNeedsDisplay];
-    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
+//    [self.view setNeedsDisplay];
+//    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
+    
+    [self.view setNeedsDisplayInRect:[[UIScreen mainScreen] applicationFrame]];
 
-    
-    
+    [self hogehoge];
+//    NSLog(@"%s",__func__);
+//    sleep(1);
 }
 -(void)receivedDeck:(Deck *)deck
 {
@@ -160,10 +183,15 @@
     [self.gameStartButton setTitle:@"ゲーム開始" forState:UIControlStateNormal];
     self.gameStartButton.enabled = YES;
     self.deck = deck;
-    [self.view setNeedsDisplay];
-    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
-
+    [self.view setNeedsDisplayInRect:[[UIScreen mainScreen] applicationFrame]];
     
+    [self hogehoge];
+
+//
+//    [self.view setNeedsDisplay];
+//    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
+//    NSLog(@"%s",__func__);
+//    sleep(1);
 }
 
 
