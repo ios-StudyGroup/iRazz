@@ -217,15 +217,16 @@ static SessionHelperSingleton *sharedData_ = nil;
     NSLog(@"%s",__func__);
     
     NSDictionary *reverse = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    if (([reverse objectForKey:@"uuid"] != nil) == TRUE){
 
-    }else if ((([reverse objectForKey:@"deck"] != nil) == TRUE)){ // deck
+    if (([reverse objectForKey:@"uuid"] != nil) == TRUE) {
+
+    } else if ((([reverse objectForKey:@"deck"] != nil) == TRUE)) { // deck
         NSData *data = reverse[@"deck"];
         
         
         [self.delegate receivedDeck:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
 
-    }else if ((([reverse objectForKey:@"message"] != nil) == TRUE)){
+    } else if ((([reverse objectForKey:@"message"] != nil) == TRUE)) {
         NSString *message = reverse[@"message"];
         [self.delegate receivedMessage:message];
     }

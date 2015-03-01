@@ -7,8 +7,9 @@
 //
 
 #import "HumGameViewController.h"
+#import "SessionHelperSingleton.h"
 
-@interface HumGameViewController ()
+@interface HumGameViewController ()<UITextFieldDelegate, SessionHelperDelegate>
 
 @property (readwrite) GAMESTATE state;
 
@@ -32,6 +33,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    //　通信後に実行されるdelegateメソッドのオブジェクトを自身に変更
+    [SessionHelperSingleton sharedManager].delegate = self;
     
     // labelのカドを丸くする
     [self setLabel:self.a_card1];
@@ -193,18 +197,22 @@
         return;
     }
     [sender setEnabled:NO];
+    
+    //とりあえずcallを投げてみる
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    [sessionHelperSingleton sendMessage:@"call"];
 
-    NSInteger ybetPrize = self.y_bet.text.integerValue;
-    NSInteger abetPrize = self.a_bet.text.integerValue;
-    if (abetPrize != ybetPrize) { //一致しない場合は合わせる
-        ybetPrize = abetPrize;
-        self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
-    }
-    
-    [self commitPot];
-    
-    [self loadNextCard];
+//    NSInteger ybetPrize = self.y_bet.text.integerValue;
+//    NSInteger abetPrize = self.a_bet.text.integerValue;
+//    if (abetPrize != ybetPrize) { //一致しない場合は合わせる
+//        ybetPrize = abetPrize;
+//        self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
+//        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+//    }
+//    
+//    [self commitPot];
+//    
+//    [self loadNextCard];
     [sender setEnabled:YES];
 }
 
@@ -301,4 +309,44 @@
     self.y_bet.text = @"0";
     self.a_bet.text = @"0";
 }
+
+# pragma mark - SessionHelperDelegate methods
+- (void) receivedMessage:(NSString *)message
+{
+    if ([message isEqualToString:@"call"] == YES) {
+        [self receivedCall];
+    } else if ([message isEqualToString:@"raise"] == YES) {
+        [self receivedRaise];
+    } else if ([message isEqualToString:@"fold"] == YES) {
+        [self receivedFold];
+    }
+}
+
+- (void) receivedCall {
+    NSLog(@"%s", __func__);
+    NSInteger ybetPrize = self.y_bet.text.integerValue;
+    NSInteger abetPrize = self.a_bet.text.integerValue;
+    if (abetPrize < ybetPrize) { //ブリングインケース
+        // 特にすることはない
+    } else { // 4th以降の場合
+        if (YES) { // 自分から動作開始の場合
+            abetPrize = ybetPrize;
+            self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+            [self commitPot];
+            [self loadNextCard];
+        } else { // 相手から動作開始の場合
+            // 特にすることはない
+        }
+    }
+}
+
+- (void) receivedRaise {
+    NSLog(@"%s", __func__);
+}
+
+- (void) receivedFold {
+    NSLog(@"%s", __func__);
+}
+
 @end
