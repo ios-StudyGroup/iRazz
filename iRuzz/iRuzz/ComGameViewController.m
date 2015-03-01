@@ -15,7 +15,7 @@
 @end
 
 
-
+// コンピュータ戦用のviewコントローラ
 @implementation ComGameViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -52,86 +52,44 @@
     
     if (self.deck == nil) { // コンピュータ戦用にデッキを準備
         self.deck = [[Deck alloc] init];
-        self.isHost = YES;
     }
     
-    if (self.isHost == YES) {
-        self.a_card1.text = @"";
-        self.a_card2.text = @"";
-        self.a_card3.text = [self.deck getCard:4].displayString;
-        self.a_card4.text = [self.deck getCard:6].displayString;
-        self.a_card5.text = [self.deck getCard:8].displayString;
-        self.a_card6.text = [self.deck getCard:10].displayString;
-        self.a_card7.text = @"";
+    self.a_card1.text = @"";
+    self.a_card2.text = @"";
+    self.a_card3.text = [self.deck getCard:4].displayString;
+    self.a_card4.text = [self.deck getCard:6].displayString;
+    self.a_card5.text = [self.deck getCard:8].displayString;
+    self.a_card6.text = [self.deck getCard:10].displayString;
+    self.a_card7.text = @"";
 
-        self.y_card1.text = [self.deck getCard:1].displayString;
-        self.y_card2.text = [self.deck getCard:3].displayString;
-        self.y_card3.text = [self.deck getCard:5].displayString;
-        self.y_card4.text = [self.deck getCard:7].displayString;
-        self.y_card5.text = [self.deck getCard:9].displayString;
-        self.y_card6.text = [self.deck getCard:11].displayString;
-        self.y_card7.text = [self.deck getCard:13].displayString;
-        
-        self.a_card4.hidden = YES;
-        self.a_card5.hidden = YES;
-        self.a_card6.hidden = YES;
-        self.a_card7.hidden = YES;
-        self.y_card4.hidden = YES;
-        self.y_card5.hidden = YES;
-        self.y_card6.hidden = YES;
-        self.y_card7.hidden = YES;
-        
-        self.pot.text = @"10";
-        Card *a_card3 = [self.deck getCard:4];
-        Card *y_card3 = [self.deck getCard:5];
-        if ([a_card3 judgeRazzCardA:a_card3 CardB:y_card3] == 0) {
-            self.y_bet.text = @"5";
-            self.a_bet.text = @"5";
-        }
-        else {
-            self.y_bet.text = @"0";
-            self.a_bet.text = @"5";
-        }
+    self.y_card1.text = [self.deck getCard:1].displayString;
+    self.y_card2.text = [self.deck getCard:3].displayString;
+    self.y_card3.text = [self.deck getCard:5].displayString;
+    self.y_card4.text = [self.deck getCard:7].displayString;
+    self.y_card5.text = [self.deck getCard:9].displayString;
+    self.y_card6.text = [self.deck getCard:11].displayString;
+    self.y_card7.text = [self.deck getCard:13].displayString;
+    
+    self.a_card4.hidden = YES;
+    self.a_card5.hidden = YES;
+    self.a_card6.hidden = YES;
+    self.a_card7.hidden = YES;
+    self.y_card4.hidden = YES;
+    self.y_card5.hidden = YES;
+    self.y_card6.hidden = YES;
+    self.y_card7.hidden = YES;
+    
+    self.pot.text = @"10";
+    Card *a_card3 = [self.deck getCard:4];
+    Card *y_card3 = [self.deck getCard:5];
+    if ([a_card3 judgeRazzCardA:a_card3 CardB:y_card3] == 0) {
+        self.y_bet.text = @"5";
+        self.a_bet.text = @"5";
     }
     else {
-        self.a_card1.text = @"";
-        self.a_card2.text = @"";
-        self.a_card3.text = [self.deck getCard:5].displayString;
-        self.a_card4.text = [self.deck getCard:7].displayString;
-        self.a_card5.text = [self.deck getCard:9].displayString;
-        self.a_card6.text = [self.deck getCard:11].displayString;
-        self.a_card7.text = @"";
-        
-        self.y_card1.text = [self.deck getCard:0].displayString;
-        self.y_card2.text = [self.deck getCard:2].displayString;
-        self.y_card3.text = [self.deck getCard:4].displayString;
-        self.y_card4.text = [self.deck getCard:6].displayString;
-        self.y_card5.text = [self.deck getCard:8].displayString;
-        self.y_card6.text = [self.deck getCard:10].displayString;
-        self.y_card7.text = [self.deck getCard:12].displayString;
-        
-        self.a_card4.hidden = YES;
-        self.a_card5.hidden = YES;
-        self.a_card6.hidden = YES;
-        self.a_card7.hidden = YES;
-        self.y_card4.hidden = YES;
-        self.y_card5.hidden = YES;
-        self.y_card6.hidden = YES;
-        self.y_card7.hidden = YES;
-        
-        self.pot.text = @"10";
-        Card *a_card3 = [self.deck getCard:5];
-        Card *y_card3 = [self.deck getCard:4];
-        if ([a_card3 judgeRazzCardA:a_card3 CardB:y_card3] == 0) {
-            self.y_bet.text = @"5";
-            self.a_bet.text = @"5";
-        }
-        else {
-            self.y_bet.text = @"0";
-            self.a_bet.text = @"5";
-        }
+        self.y_bet.text = @"0";
+        self.a_bet.text = @"5";
     }
- //   }
 }
 
 - (void)didReceiveMemoryWarning
@@ -244,23 +202,11 @@
         return;
     };
     if (self.y_card7.hidden == NO) { /* showdown */
-        NSArray *handA;
-        NSArray *handY;
-        
-        if (self.isHost == YES) {
-            self.a_card1.text = [self.deck getCard:0].displayString;
-            self.a_card2.text = [self.deck getCard:2].displayString;
-            self.a_card7.text = [self.deck getCard:12].displayString;
-            handA = [NSArray arrayWithObjects:[self.deck getCard:0], [self.deck getCard:2], [self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], [self.deck getCard:12], nil];
-            handY = [NSArray arrayWithObjects:[self.deck getCard:1], [self.deck getCard:3], [self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], [self.deck getCard:13], nil];
-        }
-        else {
-            self.a_card1.text = [self.deck getCard:1].displayString;
-            self.a_card2.text = [self.deck getCard:3].displayString;
-            self.a_card7.text = [self.deck getCard:13].displayString;
-            handA = [NSArray arrayWithObjects:[self.deck getCard:1], [self.deck getCard:3], [self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], [self.deck getCard:13], nil];
-            handY = [NSArray arrayWithObjects:[self.deck getCard:0], [self.deck getCard:2], [self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], [self.deck getCard:12], nil];
-        }
+        self.a_card1.text = [self.deck getCard:0].displayString;
+        self.a_card2.text = [self.deck getCard:2].displayString;
+        self.a_card7.text = [self.deck getCard:12].displayString;
+        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:0], [self.deck getCard:2], [self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], [self.deck getCard:12], nil];
+        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:1], [self.deck getCard:3], [self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], [self.deck getCard:13], nil];
         self.a_card1.backgroundColor = [UIColor whiteColor];
         self.a_card2.backgroundColor = [UIColor whiteColor];
         self.a_card7.backgroundColor = [UIColor whiteColor];
