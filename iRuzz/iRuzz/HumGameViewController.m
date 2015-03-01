@@ -1,14 +1,14 @@
 //
-//  ComGameViewController.m
+//  HumGameViewController.m
 //  iRazz
 //
-//  Created by cat on 2014/08/09.
-//  Copyright (c) 2014年 cat. All rights reserved.
+//  Created by cat on 2015/03/01.
+//  Copyright (c) 2015年 cat. All rights reserved.
 //
 
-#import "ComGameViewController.h"
+#import "HumGameViewController.h"
 
-@interface ComGameViewController ()
+@interface HumGameViewController ()
 
 @property (readwrite) GAMESTATE state;
 
@@ -16,7 +16,7 @@
 
 
 
-@implementation ComGameViewController
+@implementation HumGameViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

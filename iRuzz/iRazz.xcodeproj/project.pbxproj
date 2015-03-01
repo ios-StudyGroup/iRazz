@@ -23,7 +23,8 @@
 		6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B07519961EEA00A584E6 /* RazzViewController.m */; };
 		6CA9B07819961EEA00A584E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B07719961EEA00A584E6 /* Images.xcassets */; };
 		6CA9B0951996310400A584E6 /* table.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B0941996310400A584E6 /* table.png */; };
-		6CA9B098199636AA00A584E6 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B097199636AA00A584E6 /* GameViewController.m */; };
+		6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B097199636AA00A584E6 /* ComGameViewController.m */; };
+		E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E56580BC1AA2F315000DF8FE /* HumGameViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,8 +58,10 @@
 		6CA9B08819961EEA00A584E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6CA9B08A19961EEA00A584E6 /* iRazzTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iRazzTests.m; sourceTree = "<group>"; };
 		6CA9B0941996310400A584E6 /* table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = table.png; sourceTree = "<group>"; };
-		6CA9B096199636AA00A584E6 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		6CA9B097199636AA00A584E6 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		6CA9B096199636AA00A584E6 /* ComGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComGameViewController.h; sourceTree = "<group>"; };
+		6CA9B097199636AA00A584E6 /* ComGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComGameViewController.m; sourceTree = "<group>"; };
+		E56580BB1AA2F315000DF8FE /* HumGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumGameViewController.h; sourceTree = "<group>"; };
+		E56580BC1AA2F315000DF8FE /* HumGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HumGameViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,8 +122,10 @@
 				6CA9B07519961EEA00A584E6 /* RazzViewController.m */,
 				6CA9B07719961EEA00A584E6 /* Images.xcassets */,
 				6CA9B06619961EEA00A584E6 /* Supporting Files */,
-				6CA9B096199636AA00A584E6 /* GameViewController.h */,
-				6CA9B097199636AA00A584E6 /* GameViewController.m */,
+				6CA9B096199636AA00A584E6 /* ComGameViewController.h */,
+				6CA9B097199636AA00A584E6 /* ComGameViewController.m */,
+				E56580BB1AA2F315000DF8FE /* HumGameViewController.h */,
+				E56580BC1AA2F315000DF8FE /* HumGameViewController.m */,
 				6A66122719B0860F00CC3FB9 /* Card.h */,
 				6A66122819B0860F00CC3FB9 /* Card.m */,
 				6A459B5319D2A2E1007EBC93 /* Deck.h */,
@@ -239,10 +244,11 @@
 				6A66122919B0860F00CC3FB9 /* Card.m in Sources */,
 				6A459B5519D2A2E1007EBC93 /* Deck.m in Sources */,
 				6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */,
-				6CA9B098199636AA00A584E6 /* GameViewController.m in Sources */,
+				6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */,
 				6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */,
 				6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */,
 				6CA9B06C19961EEA00A584E6 /* main.m in Sources */,
+				E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */,
 				6CA9B07019961EEA00A584E6 /* RazzAppDelegate.m in Sources */,
 				6A77EAD519B873EB0085CA6C /* RazzHand.m in Sources */,
 			);

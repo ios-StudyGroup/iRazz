@@ -1,8 +1,8 @@
 //
-//  ComGameViewController.h
+//  HumGameViewController.h
 //  iRazz
 //
-//  Created by cat on 2014/08/09.
+//  Created by cat on 2015/03/01.
 //  Copyright (c) 2014年 cat. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 #import "Deck.h"
 #import "RazzHand.h"
 
-@interface ComGameViewController : UIViewController
+@interface HumGameViewController : UIViewController
 
 @property (strong, nonatomic) Deck *deck;
 @property BOOL isHost;

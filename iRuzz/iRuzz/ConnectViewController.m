@@ -15,7 +15,7 @@
  */
 #import "ConnectViewController.h"
 #import "SessionHelperSingleton.h"
-#import "GameViewController.h"
+#import "HumGameViewController.h"
 #import "Deck.h"
 
 @interface ConnectViewController ()<UITextFieldDelegate, SessionHelperDelegate>
@@ -202,7 +202,7 @@
     NSLog(@"identifier is %@",segue.identifier);
     
     if ([segue.identifier isEqualToString:@"PushGameStart"]) {
-        GameViewController *viewController = segue.destinationViewController;
+        HumGameViewController *viewController = segue.destinationViewController;
         viewController.deck = self.deck;
         viewController.isHost = self.isHost;
     }
