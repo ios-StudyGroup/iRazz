@@ -34,8 +34,17 @@ typedef NS_ENUM(NSUInteger, HP5) { /* HandPattern5 */
     HP5_FH,
 };
 
+typedef NS_ENUM(NSUInteger, HP4) { /* HandPattern4 */
+    HP4_0P,
+    HP4_1P,
+    HP4_2P,
+    HP4_3K,
+    HP4_4K,
+};
+
 - (NSInteger) judgeHandA:(NSArray *)handA HandB:(NSArray *)handB;
 - (NSInteger) checkHP7:(int *)hand;
 - (NSInteger) checkHP5:(int *)hand;
+- (NSInteger) checkHP4:(int *)hand;
 
 @end
