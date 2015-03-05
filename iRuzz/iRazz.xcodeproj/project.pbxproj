@@ -26,6 +26,7 @@
 		6CA9B0951996310400A584E6 /* table.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B0941996310400A584E6 /* table.png */; };
 		6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B097199636AA00A584E6 /* ComGameViewController.m */; };
 		E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E56580BC1AA2F315000DF8FE /* HumGameViewController.m */; };
+		E566D9471AA874FA00A8412E /* ConnectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E566D9461AA874FA00A8412E /* ConnectTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,8 @@
 		6CA9B097199636AA00A584E6 /* ComGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComGameViewController.m; sourceTree = "<group>"; };
 		E56580BB1AA2F315000DF8FE /* HumGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumGameViewController.h; sourceTree = "<group>"; };
 		E56580BC1AA2F315000DF8FE /* HumGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HumGameViewController.m; sourceTree = "<group>"; };
+		E566D9451AA874FA00A8412E /* ConnectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectTableViewController.h; sourceTree = "<group>"; };
+		E566D9461AA874FA00A8412E /* ConnectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +124,8 @@
 				2AC74CC31AA0C0D1004BF0F6 /* Main_iPhone.storyboard */,
 				6A41D2E81A9C8B8900376C76 /* SessionHelperSingleton.h */,
 				6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */,
+				E566D9451AA874FA00A8412E /* ConnectTableViewController.h */,
+				E566D9461AA874FA00A8412E /* ConnectTableViewController.m */,
 				6CA9B07419961EEA00A584E6 /* RazzViewController.h */,
 				6CA9B07519961EEA00A584E6 /* RazzViewController.m */,
 				6CA9B07719961EEA00A584E6 /* Images.xcassets */,
@@ -250,6 +255,7 @@
 				6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */,
 				6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */,
 				6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */,
+				E566D9471AA874FA00A8412E /* ConnectTableViewController.m in Sources */,
 				6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */,
 				6CA9B06C19961EEA00A584E6 /* main.m in Sources */,
 				E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */,

@@ -310,19 +310,42 @@
 */
 - (NSInteger) judgeCurrentHand
 {
-    // 暫定で3枚目のカードで強弱をつける
-    // @todo 4thストリート〜7thまでのハンドジャッジを作る
-    Card *a_card3;
-    Card *y_card3;
-
-    if (self.isHost == YES) {
-        a_card3 = [self.deck getCard:4];
-        y_card3 = [self.deck getCard:5];
-    } else {
-        a_card3 = [self.deck getCard:5];
-        y_card3 = [self.deck getCard:4];
+    if (self.y_card4.hidden == YES) {
+        Card *a_card3;
+        Card *y_card3;
+        
+        if (self.isHost == YES) {
+            a_card3 = [self.deck getCard:4];
+            y_card3 = [self.deck getCard:5];
+        } else {
+            a_card3 = [self.deck getCard:5];
+            y_card3 = [self.deck getCard:4];
+        }
+        return [a_card3 judgeRazzCardA:a_card3 CardB:y_card3];
     }
-    return [a_card3 judgeRazzCardA:a_card3 CardB:y_card3];
+    if (self.y_card5.hidden == YES) {
+
+        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], nil];
+        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], nil];
+    
+        RazzHand *russHand = [[RazzHand alloc] init];
+        return [russHand judgeHandA:handA HandB:handY];
+    }
+    if (self.y_card6.hidden == YES) {
+        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], nil];
+        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], nil];
+        
+        RazzHand *russHand = [[RazzHand alloc] init];
+        return [russHand judgeHandA:handA HandB:handY];
+    }
+    if (self.y_card7.hidden == YES) {
+        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], nil];
+        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], nil];
+        
+        RazzHand *russHand = [[RazzHand alloc] init];
+        return [russHand judgeHandA:handA HandB:handY];
+    }
+    return -1;
 }
 
 # pragma mark - SessionHelperDelegate methods
@@ -349,10 +372,12 @@
             || (self.y_card4.hidden == YES)) {  // ブリングインで、コールで帰ってきた時
             NSLog(@"goto next");
             abetPrize = ybetPrize;
-            self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
-            [self commitPot];
-            [self loadNextCard];
-            [NSThread detachNewThreadSelector:@selector(setNeedsDisplay) toTarget:self.view withObject:nil];
+            // メインスレッドで処理を実行
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
+                [self commitPot];
+                [self loadNextCard];
+            });
         } else { // 相手から動作開始の場合
             // 入力をするようにしましょう
             NSLog(@"wait input");
