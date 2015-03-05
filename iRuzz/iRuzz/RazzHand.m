@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 cat. All rights reserved.
 //
 
+// @todo MTをしないと・・・
+
 #import "RazzHand.h"
 
 #include <stdlib.h>
@@ -69,7 +71,19 @@ int int_sort( const void * a , const void * b ) {
     NSLog(@"handA=%2d,%2d,%2d,%2d,%2d,%2d,%2d\n", handAOfR[0], handAOfR[1], handAOfR[2], handAOfR[3], handAOfR[4], handAOfR[5], handAOfR[6]);
     NSLog(@"handB=%2d,%2d,%2d,%2d,%2d,%2d,%2d\n", handBOfR[0], handBOfR[1], handBOfR[2], handBOfR[3], handBOfR[4], handBOfR[5], handBOfR[6]);
 
-    return [self judgeHandAInt:handAOfR HandBInt:handBOfR];
+    switch(count) {
+        case 2:
+            return [self judgeHand2AInt:handAOfR HandBInt:handBOfR];
+        case 3:
+            return [self judgeHand3AInt:handAOfR HandBInt:handBOfR];
+        case 4:
+            return [self judgeHand4AInt:handAOfR HandBInt:handBOfR];
+        case 7:
+            return [self judgeHand7AInt:handAOfR HandBInt:handBOfR];
+        default:
+            assert("");
+            return -1;
+    }
 }
 
 /*
@@ -77,7 +91,120 @@ int int_sort( const void * a , const void * b ) {
  * @retval    1     HandBの勝ち
  * @retval    2     引き分け
  */
-- (NSInteger) judgeHandAInt:(int *)handA HandBInt:(int *)handB
+- (NSInteger) judgeHand2AInt:(int *)handA HandBInt:(int *)handB
+{
+    NSInteger pairCounterHandA = [self countPair_HP2:handA];
+    NSInteger pairCounterHandB = [self countPair_HP2:handB];
+    
+    if (pairCounterHandA < pairCounterHandB) {
+        return 0;
+    } else if (pairCounterHandA > pairCounterHandB) {
+        return 1;
+    } else { // 引き分けなら、大きい数字から比較
+        for (int i = 1; i >= 0; i--) {
+            if (handA[i] > handB[i]) {
+                return 1;
+            }
+            if (handA[i] < handB[i]) {
+                return 0;
+            }
+        }
+    }
+    return 2;
+}
+
+/*
+ * @retval    0     HandAの勝ち
+ * @retval    1     HandBの勝ち
+ * @retval    2     引き分け
+ */
+- (NSInteger) judgeHand3AInt:(int *)handA HandBInt:(int *)handB
+{
+    NSInteger pairCounterHandA = [self countPair_HP3:handA];
+    NSInteger pairCounterHandB = [self countPair_HP3:handB];
+    NSInteger threeKCounterHandA = [self count3K_HP3:handA];
+    NSInteger threeKCounterHandB = [self count3K_HP3:handB];
+    
+    if (threeKCounterHandA < threeKCounterHandB) {
+        return 0;
+    } else if (threeKCounterHandA > threeKCounterHandB) {
+        return 1;
+    } else if (threeKCounterHandA == 1) {
+        if (handA[0] < handB[0]) {
+            return 0;
+        } else {
+            return 1;
+        }
+    } else {
+        // 3Kなしパターン
+    }
+    
+    if (pairCounterHandA < pairCounterHandB) {
+        return 0;
+    } else if (pairCounterHandA > pairCounterHandB) {
+        return 1;
+    } else if (pairCounterHandA == 1) {
+        return [self judgeHP3_1P:handA Hand3B:handB];
+    } else {// 引き分けなら、大きい数字から比較
+        // Pなしパターン
+    }
+    
+    for (int i = 2; i >= 0; i--) {
+        if (handA[i] > handB[i]) {
+            return 1;
+        }
+        if (handA[i] < handB[i]) {
+            return 0;
+        }
+    }
+
+    return 2;
+}
+
+/*
+ * @retval    0     HandAの勝ち
+ * @retval    1     HandBの勝ち
+ * @retval    2     引き分け
+ */
+- (NSInteger) judgeHand4AInt:(int *)handA HandBInt:(int *)handB
+{
+    NSInteger hp4_handA = [self checkHP4:handA];
+    NSInteger hp4_handB = [self checkHP4:handB];
+    
+    if (hp4_handA < hp4_handB) {
+        return 0;
+    } else if (hp4_handA > hp4_handB) {
+        return 1;
+    } else {
+        switch (hp4_handA) {
+            case HP4_0P:
+                return [self judgeHP4_0P:handA Hand4B:handB];
+            case HP4_1P:
+                return [self judgeHP4_1P:handA Hand4B:handB];
+            case HP4_2P:
+                return [self judgeHP4_2P:handA Hand4B:handB];
+            case HP4_3K:
+                return [self judgeHP4_3K:handA Hand4B:handB];
+            case HP4_4K:
+                if (handA[0] < handB[0]) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            default:
+                assert("");
+        }
+    }
+    return 0;
+}
+
+
+/*
+ * @retval    0     HandAの勝ち
+ * @retval    1     HandBの勝ち
+ * @retval    2     引き分け
+ */
+- (NSInteger) judgeHand7AInt:(int *)handA HandBInt:(int *)handB
 {
     const NSInteger hp7ToHp5[] = {HP5_0P, HP5_0P, HP5_0P, HP5_0P, HP5_1P, HP5_1P, HP5_1P, HP5_2P, HP5_2P, HP5_2P, HP5_FH};
     
@@ -146,6 +273,24 @@ int int_sort( const void * a , const void * b ) {
 {
     // つかわんぽい
     return 0;
+}
+
+/*
+ * @return HP4
+ */
+- (NSInteger) checkHP4:(int *)hand
+{
+    NSInteger pairCounter = [self countPair_HP4:hand];
+    NSInteger threeKCounter = [self count3K_HP4:hand];
+    NSInteger fourKCounter = [self count4K_HP4:hand];
+    
+    const NSInteger No4K[2][3] = {{-1, HP4_1P, HP4_2P}, { HP4_3K, -1, -1}};
+    
+    if (fourKCounter == 1) {
+        return HP4_4K;
+    } else {
+        return No4K[threeKCounter][pairCounter];
+    }
 }
 
 - (NSInteger) countPair_HP7:(int *)hand
@@ -526,7 +671,7 @@ int int_sort( const void * a , const void * b ) {
                  RankPair:(int *)rankPair
                     Hand3:(int *)hand3
 {
-    int j;
+    int j = 0;
     for (int i = 0; i < 4; i++) {
         if (hand5[i] == hand5[i + 1]) {
             *rankPair = hand5[i];
@@ -579,4 +724,243 @@ int int_sort( const void * a , const void * b ) {
         *rank3K = hand5[4];
     }
 }
+
+// ここから2枚用
+- (NSInteger) countPair_HP2:(int *)hand
+{
+    if (hand[0] == hand[1]) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+
+// ここから3枚用
+- (NSInteger) countPair_HP3:(int *)hand
+{
+    if ((hand[0] == hand[1]) || (hand[1] == hand[2])) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+- (NSInteger) count3K_HP3:(int *)hand
+{
+    if ((hand[0] == hand[1]) && (hand[1] == hand[2])) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+- (void) dividePairHP3_1P:(int *)hand3
+                 RankPair:(int *)rankPair
+                   Kicker:(int *)kicker
+{
+    for (int i = 0; i < 2; i++) {
+        if (hand3[i] == hand3[i + 1]) {
+            *rankPair = hand3[i];
+        } else {
+            *kicker = hand3[i];
+        }
+    }
+    // 最後の要素が比較されないので手動チェック
+    if (*rankPair != hand3[2]) {
+        *kicker = hand3[2];
+    }
+}
+
+- (NSInteger) judgeHP3_1P:(int *)handA Hand3B:(int *)handB
+{
+    // ペアとペアではないもので分ける
+    int rank1PForA = 0;
+    int kickerA = 0;
+    [self dividePairHP3_1P:handA RankPair:&rank1PForA Kicker:&kickerA];
+    
+    int rank1PForB = 0;
+    int kickerB = 0;
+    [self dividePairHP3_1P:handB RankPair:&rank1PForB Kicker:&kickerB];
+    
+    // ペア比較で差があれば勝敗決定 なければペアではない部分を比較
+    if (rank1PForA > rank1PForB) {
+        return 1;
+    } else if (rank1PForA < rank1PForB) {
+        return 0;
+    } else {
+        if (kickerA > kickerB) {
+            return 1;
+        }
+        if (kickerA < kickerB) {
+            return 0;
+        }
+    }
+    return 2;
+}
+
+// ここから4枚用
+- (NSInteger) countPair_HP4:(int *)hand
+{
+    NSInteger pairCounter = 0;
+    NSInteger threeKCounter = [self count3K_HP4:hand];
+    NSInteger fourKCounter = [self count4K_HP4:hand];
+    for (int i = 0; i < 4; i++) {
+        if (hand[i] == hand[i + 1]) {
+            pairCounter++;
+        }
+    }
+    return (pairCounter - (threeKCounter * 2) - (fourKCounter * 3));
+}
+
+- (NSInteger) count3K_HP4:(int *)hand
+{
+    NSInteger threeKCounter = 0;
+    NSInteger fourKCounter = [self count4K_HP4:hand];
+    for (int i = 0; i < 2; i++) {
+        if ( (hand[i] == hand[i + 1]) && (hand[i] == hand[i + 2])) {
+            threeKCounter++;
+        }
+    }
+    return threeKCounter - (fourKCounter * 2);
+}
+
+- (NSInteger) count4K_HP4:(int *)hand
+{
+    if ((hand[0] == hand[1]) && (hand[0] == hand[2]) && (hand[0] == hand[3])) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+- (NSInteger) judgeHP4_0P:(int *)handA Hand4B:(int *)handB
+{
+    for (int i = 3; i >= 0; i--) {
+        if (handA[i] > handB[i]) {
+            return 1;
+        }
+        if (handA[i] < handB[i]) {
+            return 0;
+        }
+    }
+    return 2;
+}
+
+- (NSInteger) judgeHP4_1P:(int *)handA Hand4B:(int *)handB
+{
+    // ペアとペアではないもので分ける
+    int rank1PForA = 0;
+    int handANoP[2] = {0};
+    [self dividePairHP4_1P:handA RankPair:&rank1PForA Hand2:handANoP];
+    
+    int rank1PForB = 0;
+    int handBNoP[2] = {0};
+    [self dividePairHP4_1P:handB RankPair:&rank1PForB Hand2:handBNoP];
+    
+    // ペア比較で差があれば勝敗決定 なければペアではない部分を比較
+    if (rank1PForA > rank1PForB) {
+        return 1;
+    } else if (rank1PForA < rank1PForB) {
+        return 0;
+    } else {
+        for (int i = 1; i >= 0; i--) {
+            if (handANoP[i] > handBNoP[i]) {
+                return 1;
+            }
+            if (handANoP[i] < handBNoP[i]) {
+                return 0;
+            }
+        }
+    }
+    return 2;
+}
+
+- (NSInteger) judgeHP4_2P:(int *)handA Hand4B:(int *)handB
+{
+    // 2244 とか 55JJのようになっているので、上位のカードから比較
+    if (handA[2] > handB[2]) {
+        return 1;
+    }
+    if (handA[2] < handB[2]) {
+        return 0;
+    }
+    
+    if (handA[0] > handB[0]) {
+        return 1;
+    }
+    if (handA[0] < handB[0]) {
+        return 0;
+    }
+    
+    return 2;
+}
+
+- (NSInteger) judgeHP4_3K:(int *)handA Hand4B:(int *)handB
+{
+    // 3Kとkickerに分ける
+    int rank3KForA = 0;
+    int kickerA = 0;
+    [self dividePairHP4_3K:handA
+                RankThreeK:&rank3KForA
+                    Kicker:&kickerA];
+    
+    int rank3KForB = 0;
+    int kickerB = 0;
+    [self dividePairHP4_3K:handB
+                RankThreeK:&rank3KForB
+                    Kicker:&kickerB];
+    
+    if (rank3KForA > rank3KForB) {
+        return 1;
+    }
+    if (rank3KForA < rank3KForB) {
+        return 0;
+    }
+    
+    if (kickerA > kickerB) {
+        return 1;
+    }
+    if (kickerA < kickerB) {
+        return 0;
+    }
+    return 2;
+}
+
+- (void) dividePairHP4_1P:(int *)hand4
+                 RankPair:(int *)rankPair
+                    Hand2:(int *)hand2
+{
+    int j = 0;
+    for (int i = 0; i < 3; i++) {
+        if (hand4[i] == hand4[i + 1]) {
+            *rankPair = hand4[i];
+        } else {
+            hand2[j] = hand4[i];
+            j++;
+        }
+    }
+    // 最後の要素が比較されないので手動チェック
+    if (*rankPair != hand4[3]) {
+        hand2[1] = hand4[3];
+    }
+}
+
+- (void) dividePairHP4_3K:(int *)hand4
+               RankThreeK:(int *)rankThreeK
+                   Kicker:(int *)kicker
+{
+    for (int i = 0; i < 1; i++) {
+        if ((hand4[i] == hand4[i + 1]) && (hand4[i] == hand4[i + 2])) {
+            *rankThreeK = hand4[i];
+        } else {
+            *kicker = hand4[i];
+        }
+    }
+    // 最後の要素が比較されないので手動チェック
+    if (*rankThreeK != hand4[3]) {
+        *kicker = hand4[3];
+    }
+}
+
 @end

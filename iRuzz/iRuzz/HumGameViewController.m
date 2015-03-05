@@ -7,8 +7,9 @@
 //
 
 #import "HumGameViewController.h"
+#import "SessionHelperSingleton.h"
 
-@interface HumGameViewController ()
+@interface HumGameViewController ()<UITextFieldDelegate, SessionHelperDelegate>
 
 @property (readwrite) GAMESTATE state;
 
@@ -33,6 +34,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //　通信後に実行されるdelegateメソッドのオブジェクトを自身に変更
+    [SessionHelperSingleton sharedManager].delegate = self;
+    
     // labelのカドを丸くする
     [self setLabel:self.a_card1];
     [self setLabel:self.a_card2];
@@ -49,11 +53,6 @@
     [self setLabel:self.y_card6];
     [self setLabel:self.y_card7];
     self.state = PLAYING;
-    
-    if (self.deck == nil) { // コンピュータ戦用にデッキを準備
-        self.deck = [[Deck alloc] init];
-        self.isHost = YES;
-    }
     
     if (self.isHost == YES) {
         self.a_card1.text = @"";
@@ -86,7 +85,7 @@
         Card *y_card3 = [self.deck getCard:5];
         if ([a_card3 judgeRazzCardA:a_card3 CardB:y_card3] == 0) {
             self.y_bet.text = @"5";
-            self.a_bet.text = @"5";
+            self.a_bet.text = @"0";
         }
         else {
             self.y_bet.text = @"0";
@@ -124,14 +123,13 @@
         Card *y_card3 = [self.deck getCard:4];
         if ([a_card3 judgeRazzCardA:a_card3 CardB:y_card3] == 0) {
             self.y_bet.text = @"5";
-            self.a_bet.text = @"5";
+            self.a_bet.text = @"0";
         }
         else {
             self.y_bet.text = @"0";
             self.a_bet.text = @"5";
         }
     }
- //   }
 }
 
 - (void)didReceiveMemoryWarning
@@ -193,18 +191,21 @@
         return;
     }
     [sender setEnabled:NO];
-
+    
     NSInteger ybetPrize = self.y_bet.text.integerValue;
     NSInteger abetPrize = self.a_bet.text.integerValue;
-    if (abetPrize != ybetPrize) { //一致しない場合は合わせる
+    if (abetPrize > ybetPrize) { //一致しない場合は合わせる(ブリングインの時は、一致しないけど、合わせない）
         ybetPrize = abetPrize;
         self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+        [self commitPot];
+        [self loadNextCard];
     }
     
-    [self commitPot];
-    
-    [self loadNextCard];
+    //とりあえずcallを投げてみる
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    [sessionHelperSingleton sendMessage:@"call"];
+
     [sender setEnabled:YES];
 }
 
@@ -301,4 +302,80 @@
     self.y_bet.text = @"0";
     self.a_bet.text = @"0";
 }
+
+/*
+ * @retval    0     aのハンドが強い ex a=2 b=5
+ * @retval    1     bのハンドが強い ex a=T b=A
+ * @retval    2     引き分け(とりあえずなし）
+*/
+- (NSInteger) judgeCurrentHand
+{
+    // 暫定で3枚目のカードで強弱をつける
+    // @todo 4thストリート〜7thまでのハンドジャッジを作る
+    Card *a_card3;
+    Card *y_card3;
+
+    if (self.isHost == YES) {
+        a_card3 = [self.deck getCard:4];
+        y_card3 = [self.deck getCard:5];
+    } else {
+        a_card3 = [self.deck getCard:5];
+        y_card3 = [self.deck getCard:4];
+    }
+    return [a_card3 judgeRazzCardA:a_card3 CardB:y_card3];
+}
+
+# pragma mark - SessionHelperDelegate methods
+- (void) receivedMessage:(NSString *)message
+{
+    if ([message isEqualToString:@"call"] == YES) {
+        [self receivedCall];
+    } else if ([message isEqualToString:@"raise"] == YES) {
+        [self receivedRaise];
+    } else if ([message isEqualToString:@"fold"] == YES) {
+        [self receivedFold];
+    }
+}
+
+- (void) receivedCall {
+    NSLog(@"%s", __func__);
+    NSInteger ybetPrize = self.y_bet.text.integerValue;
+    NSInteger abetPrize = self.a_bet.text.integerValue;
+    if (abetPrize > ybetPrize) { //ブリングインケース
+        // なにもしなくていい
+        NSLog(@"bring in");
+    } else { // 4th以降の場合
+        if (([self judgeCurrentHand] == 0)      // 自分から動作開始の場合
+            || (self.y_card4.hidden == YES)) {  // ブリングインで、コールで帰ってきた時
+            NSLog(@"goto next");
+            abetPrize = ybetPrize;
+            self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
+            [self commitPot];
+            [self loadNextCard];
+            [NSThread detachNewThreadSelector:@selector(setNeedsDisplay) toTarget:self.view withObject:nil];
+        } else { // 相手から動作開始の場合
+            // 入力をするようにしましょう
+            NSLog(@"wait input");
+        }
+    }
+}
+
+- (void) receivedRaise {
+    NSLog(@"%s", __func__);
+}
+
+- (void) receivedFold {
+    NSLog(@"%s", __func__);
+    UIAlertView *alert =
+    [[UIAlertView alloc]
+     initWithTitle:@"Result"
+     message:@"You Win!"
+     delegate:nil
+     cancelButtonTitle:nil
+     otherButtonTitles:@"OK", nil
+     ];
+    [alert show];
+    self.state = END; /* ゲーム終了状態へ遷移 */
+}
+
 @end
