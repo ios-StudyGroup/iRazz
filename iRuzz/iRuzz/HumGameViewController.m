@@ -21,6 +21,8 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    NSLog(@"%s",__func__);
+
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -31,9 +33,17 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"%s",__func__);
+
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"%s",__func__);
+
+
     //　通信後に実行されるdelegateメソッドのオブジェクトを自身に変更
     [SessionHelperSingleton sharedManager].delegate = self;
     
@@ -134,6 +144,8 @@
 
 - (void)didReceiveMemoryWarning
 {
+    NSLog(@"%s",__func__);
+
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -151,6 +163,8 @@
 
 - (IBAction)raise:(id)sender
 {
+    NSLog(@"%s",__func__);
+
     if (self.state == END) { /* 最後まで盤面が進んでいれば無効化 */
         return;
     }
@@ -187,6 +201,8 @@
 
 - (IBAction)call:(id)sender
 {
+    NSLog(@"%s",__func__);
+
     if (self.state == END) { /* 最後まで盤面が進んでいれば無効化 */
         return;
     }
@@ -211,6 +227,8 @@
 
 - (IBAction)fold:(id)sender
 {
+    NSLog(@"%s",__func__);
+
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
     [sessionHelperSingleton sendMessage:@"fold"];
 
@@ -219,6 +237,8 @@
 
 - (void) setLabel:(UILabel *)label
 {
+    NSLog(@"%s",__func__);
+
     [[label layer] setCornerRadius:10.0];
     [label setClipsToBounds:YES];
     [[label layer] setBorderColor:[[UIColor blueColor] CGColor]];
@@ -227,6 +247,8 @@
 
 - (void) loadNextCard
 {
+    NSLog(@"%s",__func__);
+
     if (self.y_card4.hidden == YES) {
         self.y_card4.hidden = NO;
         self.a_card4.hidden = NO;
@@ -299,6 +321,8 @@
 
 - (void) commitPot
 {
+    NSLog(@"%s",__func__);
+
     NSInteger potPrize = self.pot.text.integerValue;
     potPrize = potPrize + self.y_bet.text.integerValue + self.a_bet.text.integerValue;
     self.pot.text = [NSString stringWithFormat:@"%ld", (long)potPrize];
@@ -313,6 +337,8 @@
 */
 - (NSInteger) judgeCurrentHand
 {
+    NSLog(@"%s",__func__);
+
     if (self.y_card4.hidden == YES) {
         Card *a_card3;
         Card *y_card3;
@@ -354,6 +380,8 @@
 # pragma mark - SessionHelperDelegate methods
 - (void) receivedMessage:(NSString *)message
 {
+    NSLog(@"%s",__func__);
+
     if ([message isEqualToString:@"call"] == YES) {
         [self receivedCall];
     } else if ([message isEqualToString:@"raise"] == YES) {
@@ -363,8 +391,10 @@
     }
 }
 
-- (void) receivedCall {
+- (void) receivedCall
+{
     NSLog(@"%s", __func__);
+    
     NSInteger ybetPrize = self.y_bet.text.integerValue;
     NSInteger abetPrize = self.a_bet.text.integerValue;
     if (abetPrize > ybetPrize) { //ブリングインケース
@@ -393,6 +423,9 @@
 }
 
 - (void) receivedFold {
+
+    NSLog(@"%s",__func__);
+
     [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
 
     NSLog(@"%s", __func__);
