@@ -101,9 +101,10 @@
 - (IBAction)gameStartButtonClick:(id)sender
 {
     NSLog(@"%s", __func__);
-    [self performSegueWithIdentifier:@"PushGameStart" sender:self];
     
 }
+
+
 
 -(BOOL)checkDisplayName:(NSString *)displayName
 {
@@ -139,16 +140,9 @@
         // 適当に配列を作る
         // カードを生成
         self.deck = [[Deck alloc] init];
-        
+
         [[SessionHelperSingleton sharedManager] sendDeck:[NSKeyedArchiver archivedDataWithRootObject:self.deck]];
     }
-//    [self.view setNeedsDisplay];
-//    [self.view drawRect:[[UIScreen mainScreen] applicationFrame]];
-    
-    [self.view setNeedsDisplayInRect:[[UIScreen mainScreen] applicationFrame]];
-
-//    NSLog(@"%s",__func__);
-//    sleep(1);
 }
 -(void)receivedDeck:(Deck *)deck
 {
@@ -160,7 +154,6 @@
     [self.gameStartButton setTitle:@"ゲーム開始" forState:UIControlStateNormal];
     self.gameStartButton.enabled = YES;
     self.deck = deck;
-    [self.view setNeedsDisplayInRect:[[UIScreen mainScreen] applicationFrame]];
 }
 
 

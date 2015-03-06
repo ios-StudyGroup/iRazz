@@ -38,11 +38,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-}
--(void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"%s",__func__);
-
 
     //　通信後に実行されるdelegateメソッドのオブジェクトを自身に変更
     [SessionHelperSingleton sharedManager].delegate = self;
