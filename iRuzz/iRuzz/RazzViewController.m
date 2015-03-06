@@ -6,10 +6,8 @@
 //  Copyright (c) 2014年 cat. All rights reserved.
 //
 #import "RazzViewController.h"
-#import "ConnectTableViewController.h"
 
 @interface RazzViewController ()
-- (IBAction)connectClick:(id)sender;
 
 @end
 
@@ -35,19 +33,5 @@
  }
  */
 
-- (IBAction)connectClick:(id)sender {
-    
-    
-    
-    // 次画面を指定して遷移
-    ConnectTableViewController *tableViewController = [[ConnectTableViewController alloc] init];
-    
-    
-//    tableViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    
-    [self presentViewController:tableViewController animated:YES completion:^ {
-        // 完了時の処理をここに書きます
-    }];
-}
 @end
 

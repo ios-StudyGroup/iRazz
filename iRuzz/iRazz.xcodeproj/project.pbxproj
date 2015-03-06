@@ -26,7 +26,6 @@
 		6CA9B0951996310400A584E6 /* table.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B0941996310400A584E6 /* table.png */; };
 		6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B097199636AA00A584E6 /* ComGameViewController.m */; };
 		E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E56580BC1AA2F315000DF8FE /* HumGameViewController.m */; };
-		E566D9471AA874FA00A8412E /* ConnectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E566D9461AA874FA00A8412E /* ConnectTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -255,7 +254,6 @@
 				6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */,
 				6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */,
 				6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */,
-				E566D9471AA874FA00A8412E /* ConnectTableViewController.m in Sources */,
 				6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */,
 				6CA9B06C19961EEA00A584E6 /* main.m in Sources */,
 				E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */,
