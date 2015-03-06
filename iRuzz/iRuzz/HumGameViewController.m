@@ -211,6 +211,9 @@
 
 - (IBAction)fold:(id)sender
 {
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    [sessionHelperSingleton sendMessage:@"fold"];
+
     [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
 }
 
@@ -390,6 +393,8 @@
 }
 
 - (void) receivedFold {
+    [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
+
     NSLog(@"%s", __func__);
     UIAlertView *alert =
     [[UIAlertView alloc]
