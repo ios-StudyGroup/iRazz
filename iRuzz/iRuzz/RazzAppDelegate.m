@@ -33,7 +33,9 @@
     
     NSLog(@"%s", __func__);
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    [sessionHelperSingleton sendMessage:@"quit"];
     [sessionHelperSingleton cancelConect];
+    
     
 }
 

@@ -202,7 +202,6 @@ static SessionHelperSingleton *sharedData_ = nil;
             [self.session cancelConnectPeer:self.session.connectedPeers[i]];
         }
     }
-
 }
 
 
@@ -215,7 +214,7 @@ static SessionHelperSingleton *sharedData_ = nil;
 {
     NSLog(@"%s",__func__);
     
-    [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:0];
+    [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:5];
 }
 
 // A nearby peer has stopped advertising
