@@ -8,6 +8,11 @@
 
 #import "ComGameViewController.h"
 
+typedef NS_ENUM(NSUInteger, GAMESTATE) {
+    PLAYING,
+    END,
+};
+
 @interface ComGameViewController ()
 
 @property (readwrite) GAMESTATE state;

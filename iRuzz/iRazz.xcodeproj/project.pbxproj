@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2AC74CC51AA0C0D1004BF0F6 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AC74CC31AA0C0D1004BF0F6 /* Main_iPhone.storyboard */; };
+		2AE9CA531AAA2BD4004CE89C /* ConnectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E566D9461AA874FA00A8412E /* ConnectTableViewController.m */; };
 		6A31971219B6989700AAD4DE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A31971119B6989700AAD4DE /* QuartzCore.framework */; };
 		6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A41D2E61A9C8B7A00376C76 /* SessionHelperSingleton.m */; };
 		6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A41D2EA1A9C92B200376C76 /* ConnectViewController.m */; };
@@ -254,6 +255,7 @@
 				6A41D2E71A9C8B7A00376C76 /* SessionHelperSingleton.m in Sources */,
 				6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */,
 				6A41D2EB1A9C92B200376C76 /* ConnectViewController.m in Sources */,
+				2AE9CA531AAA2BD4004CE89C /* ConnectTableViewController.m in Sources */,
 				6CA9B07619961EEA00A584E6 /* RazzViewController.m in Sources */,
 				6CA9B06C19961EEA00A584E6 /* main.m in Sources */,
 				E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */,

@@ -17,9 +17,12 @@
 @required
 
 @optional
--(void)sessionConnected;
--(void)receivedDeck:(Deck *)deck;
+-(void)sessionConnected:(NSString *)displayName;
+-(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName;
 -(void)receivedMessage:(NSString *)message;
+-(void)lostPeerWithDisplayName:(NSString *)displayName;
+-(void)sessionNotConnected;
+
 
 @end
 
@@ -27,15 +30,13 @@
 
 + (SessionHelperSingleton *)sharedManager;
 
-//@property (nonatomic, readonly) MCSession *session;
-//@property (nonatomic, readonly) MCPeerID *myPeerID;
-//
-//@property (nonatomic, readonly) MCPeerID *connectedPeerID;
 
 @property MCSession *session;
 @property MCPeerID *myPeerID;
+@property NSMutableArray *connectedPeerList;    // MCSessionのconnectedPeersを使えばいいのかも
 
-@property MCPeerID *connectedPeerID;
+@property MCPeerID *selectedPeerID;
+@property NSString *currentDelegateClassName;
 
 
 @property (nonatomic, weak) id <SessionHelperDelegate> delegate;
@@ -44,8 +45,12 @@
 - (void)startBrowsiongWithDisplayName:(NSString *)displayName;
 - (void)startAdvertisingWithDisplayName:(NSString *)displayName;
 
--(void)sendDeck:(NSData *)deck;
--(void)sendMessage:(NSString *)message;
+-(BOOL)sendDeck:(NSData *)deck;
+-(BOOL)sendMessage:(NSString *)message;
+-(void)stopBrowsingAndAdvertising;
+
+-(BOOL)setSelectedPeerIDWithDisplayName:(NSString *)displayName;
+-(void)cancelConect;
 
 
 

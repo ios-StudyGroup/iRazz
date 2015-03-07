@@ -39,9 +39,5 @@
 - (IBAction)call:(id)sender;
 - (IBAction)fold:(id)sender;
 
-typedef NS_ENUM(NSUInteger, GAMESTATE) {
-    PLAYING,
-    END,
-};
 
 @end

@@ -9,9 +9,15 @@
 #import "HumGameViewController.h"
 #import "SessionHelperSingleton.h"
 
+typedef NS_ENUM(NSUInteger, GAMESTATE) {
+    PLAYING,
+    END,
+};
+
 @interface HumGameViewController ()<UITextFieldDelegate, SessionHelperDelegate>
 
 @property (readwrite) GAMESTATE state;
+@property BOOL isChangeView; // 画面遷移をしてもいいかのフラグ(対戦相手がFoldでゲームを終了->アラート表示中に、再度、対戦をしようとした時はViewを元に戻さない)
 
 @end
 
@@ -39,11 +45,17 @@
     // Do any additional setup after loading the view.
     
 
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"%s",__func__);
     //　通信後に実行されるdelegateメソッドのオブジェクトを自身に変更
     [SessionHelperSingleton sharedManager].delegate = self;
     
-
+    
     [self initialStatus];
+
 }
 
 
@@ -142,6 +154,8 @@
             self.a_bet.text = @"5";
         }
     }
+    
+    self.isChangeView = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -166,6 +180,12 @@
 - (IBAction)raise:(id)sender
 {
     NSLog(@"%s",__func__);
+    if ([self isActiveSession] == NO){
+        // 前画面に戻る
+        [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
+        self.state = END; /* ゲーム終了状態へ遷移 */
+    }
+
 
     if (self.state == END) { /* 最後まで盤面が進んでいれば無効化 */
         return;
@@ -204,11 +224,34 @@
 - (IBAction)call:(id)sender
 {
     NSLog(@"%s",__func__);
+    if ([self isActiveSession] == NO){
+        // 前画面に戻る
+        [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
+        self.state = END; /* ゲーム終了状態へ遷移 */
+    }
+    
 
     if (self.state == END) { /* 最後まで盤面が進んでいれば無効化 */
         return;
     }
     [sender setEnabled:NO];
+
+    
+    //とりあえずcallを投げてみる
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    if ([sessionHelperSingleton sendMessage:@"call"] == NO){
+        // アラートを表示
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー" message:@"Callに失敗しました" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+        }]];
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+        return;
+        
+    }
+
     
     NSInteger ybetPrize = self.y_bet.text.integerValue;
     NSInteger abetPrize = self.a_bet.text.integerValue;
@@ -220,9 +263,6 @@
         [self loadNextCard];
     }
     
-    //とりあえずcallを投げてみる
-    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
-    [sessionHelperSingleton sendMessage:@"call"];
 
     [sender setEnabled:YES];
 }
@@ -230,17 +270,24 @@
 - (IBAction)fold:(id)sender
 {
     NSLog(@"%s",__func__);
+    if ([self isActiveSession] == NO){
+        // 前画面に戻る
+        [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
+        self.state = END; /* ゲーム終了状態へ遷移 */
+    }
 
-    // ゲームを続ける or 辞めるのダイアログを表示
+    
+
+    // 次のゲーム or ゲーム終了のダイアログを表示
     UIAlertController *alertController
     = [UIAlertController alertControllerWithTitle:@"Fold"
                                           message:@"ゲームを続けますか？"
                                    preferredStyle:UIAlertControllerStyleActionSheet];
     
-    [alertController addAction:[UIAlertAction actionWithTitle:@"続ける" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [alertController addAction:[UIAlertAction actionWithTitle:@"次のゲーム" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         // 続ける場合は、Deckを作成し送信する
         SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
-        [sessionHelperSingleton sendMessage:@"continue"];
+        [sessionHelperSingleton sendMessage:@"nextGame"];
         
         self.deck = [[Deck alloc] init];
         [self initialStatus];
@@ -248,8 +295,8 @@
         [[SessionHelperSingleton sharedManager] sendDeck:[NSKeyedArchiver archivedDataWithRootObject:self.deck]];
 
     }]];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"辞める" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        // 辞める場合は、quitメッセージを送信し、前の画面に遷移
+    [alertController addAction:[UIAlertAction actionWithTitle:@"対戦終了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        // 対戦を終了する場合は、quitメッセージを送信し、前の画面に遷移
         SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
         [sessionHelperSingleton sendMessage:@"quit"];
         
@@ -419,8 +466,8 @@
         [self receivedRaise];
     } else if ([message isEqualToString:@"fold"] == YES) {
         [self receivedFold];
-    } else if ([message isEqualToString:@"continue"] == YES) {
-        [self receivedContinue];
+    } else if ([message isEqualToString:@"nextGame"] == YES) {
+        [self receivedNextGame];
     }else if ([message isEqualToString:@"quit"] == YES) {
         [self receivedQuit];
     }
@@ -465,10 +512,10 @@
     self.state = END; /* ゲーム終了状態へ遷移 */
 }
 
-- (void)receivedContinue
+- (void)receivedNextGame
 {
     // 何もしない
-    // continueが送られた後はDeckが送られてくるはず。そこで処理する
+    // nextGameが送られた後はDeckが送られてくるはず。そこで処理する
     NSLog(@"%s",__func__);
     
 }
@@ -479,21 +526,80 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"通知" message:@"対戦相手がゲームを終了しました" preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
-        self.state = END; /* ゲーム終了状態へ遷移 */
+
+        if (self.isChangeView == YES){
+            [self dismissViewControllerAnimated:NO completion:^{
+                // 特になにもしない
+            }]; /* Close */
+            self.state = END; /* ゲーム終了状態へ遷移 */
+        }else{
+            // 再描画
+            [self.view setNeedsDisplay];
+            
+        }
     }]];
     
+    self.isChangeView = YES; //アラート表示中にDeckが送られてきたら、前の画面に戻らない
+
     [self presentViewController:alertController animated:YES completion:nil];
     
 }
 
--(void)receivedDeck:(Deck *)deck
+
+-(void)sessionNotConnected
+{
+    NSLog(@"%s", __func__);
+    // 前の画面に戻る
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー" message:@"接続が切れました" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+         if (self.isChangeView == YES){
+            [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
+            self.state = END; /* ゲーム終了状態へ遷移 */
+         }else{
+             // 再描画
+             [self.view setNeedsDisplay];
+
+         }
+    }]];
+    
+    self.isChangeView = YES; //アラート表示中にDeckが送られてきたら、前の画面に戻らない
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
+-(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName
 {
     NSLog(@"%s",__func__);
     self.deck = deck;
     
     [self initialStatus];
+    self.isChangeView = NO;
 }
+
+
+-(BOOL)isActiveSession
+{
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    if (sessionHelperSingleton.selectedPeerID == nil){
+        // アラートを表示
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー" message:@"接続がきれています" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+        }]];
+        [self presentViewController:alertController animated:YES completion:nil];
+
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
+
+
 
 
 @end
