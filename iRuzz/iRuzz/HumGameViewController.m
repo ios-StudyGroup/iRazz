@@ -473,6 +473,50 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     }
 }
 
+-(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName
+{
+    NSLog(@"%s",__func__);
+    self.deck = deck;
+    
+    
+    [self initialStatus];
+    self.isChangeView = NO;
+}
+
+-(void)lostPeerWithDisplayName:(NSString *)displayName
+{
+    NSLog(@"%s",__func__);
+    // 何もしない
+}
+
+
+-(void)didChangeState:(MCPeerID *)peerID state:(MCSessionState)state
+{
+    NSLog(@"%s", __func__);
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    
+    if (state == MCSessionStateNotConnected && [peerID.displayName isEqualToString:sessionHelperSingleton.selectedPeerID.displayName]){
+        // 接続が切れた
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー" message:@"接続が切れました" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            if (self.isChangeView == YES){
+                [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
+                self.state = END; /* ゲーム終了状態へ遷移 */
+            }else{
+                // 再描画
+                [self.view setNeedsDisplay];
+                
+            }
+        }]];
+        
+        self.isChangeView = YES; //アラート表示中にDeckが送られてきたら、前の画面に戻らない
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+
 
 - (void) receivedCall
 {
@@ -546,39 +590,6 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
 }
 
 
--(void)sessionNotConnected
-{
-    NSLog(@"%s", __func__);
-    // 前の画面に戻る
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー" message:@"接続が切れました" preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        
-         if (self.isChangeView == YES){
-            [self dismissViewControllerAnimated:NO completion:nil]; /* Close */
-            self.state = END; /* ゲーム終了状態へ遷移 */
-         }else{
-             // 再描画
-             [self.view setNeedsDisplay];
-
-         }
-    }]];
-    
-    self.isChangeView = YES; //アラート表示中にDeckが送られてきたら、前の画面に戻らない
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
-
--(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName
-{
-    NSLog(@"%s",__func__);
-    self.deck = deck;
-    
-    [self initialStatus];
-    self.isChangeView = NO;
-}
-
-
 -(BOOL)isActiveSession
 {
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
@@ -597,9 +608,6 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     
     return YES;
 }
-
-
-
 
 
 @end

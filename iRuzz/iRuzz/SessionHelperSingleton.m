@@ -39,7 +39,6 @@ static SessionHelperSingleton *sharedData_ = nil;
     self = [super init];
     if (self) {
         //Initialization
-        self.connectedPeerList = [NSMutableArray array];
         self.invitationSendingList = [NSMutableArray array];
     }
     return self;
@@ -160,17 +159,17 @@ static SessionHelperSingleton *sharedData_ = nil;
 
 -(BOOL)setSelectedPeerIDWithDisplayName:(NSString *)displayName
 {
-    int count = (int)[self.connectedPeerList count];
+    int count = (int)[self.session.connectedPeers count];
     NSLog(@"count is %d", count);
     NSLog(@"displayName is %@", displayName);
     
     for (int i = 0; i < count; i++){
-        MCPeerID *p_id = self.connectedPeerList[i];
+        MCPeerID *p_id = self.session.connectedPeers[i];
         NSLog(@"%@", p_id.displayName);
         
         if ([displayName isEqualToString: p_id.displayName]){
             NSLog(@"select %@", p_id.displayName);
-            self.selectedPeerID = self.connectedPeerList[i];
+            self.selectedPeerID = self.session.connectedPeers[i];
             return YES;
             break;
         }
@@ -185,62 +184,38 @@ static SessionHelperSingleton *sharedData_ = nil;
 -(void)cancelConect
 {
     NSLog(@"%s", __func__);
-    int count = (int)[self.connectedPeerList count];
+    int count = (int)[self.session.connectedPeers count];
     for (int i = 0; i < count; i++){
-        [self.session cancelConnectPeer:self.connectedPeerList[i]];
+        [self.session cancelConnectPeer:self.session.connectedPeers[i]];
     }
-    [self.connectedPeerList removeAllObjects];
-    [self.invitationSendingList removeAllObjects];
+//    [self.invitationSendingList removeAllObjects];
+}
+/**
+ displayName以外のPeerをキャンセルする
+ */
+-(void)cancelConectWithoutPeer:(NSString*)displayName
+{
+    int count = (int)[self.session.connectedPeers count];
+    for (int i = 0; i < count; i++){
+        MCPeerID *peerID = self.session.connectedPeers[i];
+        if (![peerID.displayName isEqualToString:displayName]){
+            [self.session cancelConnectPeer:self.session.connectedPeers[i]];
+        }
+    }
+
 }
 
 
 
 
 
+
 # pragma mark - MCNearbyServiceBrowserDelegate methods
-/**
- 招待を受けたときに、自分のdisplayNameと相手のdisplayNameを比較し、
- 辞書順？で自分のdisplayNameが小さい場合のみ招待を送る。
- (招待を受けるのは、自分のdisplayNameより大きい場合のみ)
- */
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
     NSLog(@"%s",__func__);
     
-    NSLog(@"%@", peerID.displayName);
-    if ([self.connectedPeerList containsObject:peerID]){
-        NSLog(@"再接続");
-        [self.delegate sessionConnected:[peerID displayName]];
-    }else{
-        // 見つかったpeerIDに対して招待を送る
-        // 送信中のものには送らない
-        // 連続して招待を送っているような気がしたので、
-        // 招待を送信中の判断と、招待を送る側(displayが小さい方)の判断をした
-        // しかし、招待を送信中のログが出力されることはない？
-        if(![self.invitationSendingList containsObject:peerID.displayName]){
-            NSLog(@"招待送信中のリストに%@はない",peerID.displayName);
-            NSComparisonResult result = [peerID.displayName  compare:self.myPeerID.displayName];
-            switch (result) {
-                case NSOrderedSame: // 一致
-                    break;
-                case NSOrderedAscending: // peerID.displayName が小さい
-                    // 招待を送る
-                    NSLog(@"招待を送る");
-                    [self.invitationSendingList addObject:peerID.displayName];
-                    [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:5];
-                    break;
-                case NSOrderedDescending: // peerID.displayName が大きい
-                    NSLog(@"招待を送らない");
-                    break;
-                    
-                default:
-                    break;
-            }
-        }else{
-            NSLog(@"%@には招待を送信中",peerID.displayName);
-
-        }
-    }
+    [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:0];
 }
 
 // A nearby peer has stopped advertising
@@ -264,32 +239,12 @@ static SessionHelperSingleton *sharedData_ = nil;
 
 
 # pragma mark - MCNearbyServiceAdvertiserDelegate methods
-/**
- 招待を受けたときに、自分のdisplayNameと相手のdisplayNameを比較し、
- 辞書順で自分のdisplayNameが大きい場合のみ招待を受ける。
- (招待を送るのは、自分のdisplayNameより小さい場合のみ)
- */
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler
 {
     NSLog(@"%s", __func__);
 
-    NSComparisonResult result = [peerID.displayName  compare:self.myPeerID.displayName];
-    switch (result) {
-        case NSOrderedSame: // 一致
-            break;
-        case NSOrderedAscending: // peerID.displayName が小さい
-            NSLog(@"招待を受けない");
-            
-            break;
-        case NSOrderedDescending: // peerID.displayName が大きい
-            // 招待を受ける
-            NSLog(@"招待を受ける");
-            invitationHandler(YES, self.session);
-            break;
-            
-        default:
-            break;
-    }
+    invitationHandler(YES, self.session);
+
 }
 
 # pragma mark - MCNearbyServiceAdvertiserDelegate optional methods
@@ -360,71 +315,8 @@ static SessionHelperSingleton *sharedData_ = nil;
     // メインスレッドで処理を実行
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        if (state == MCSessionStateConnected){
-            NSLog(@"接続完了");
-            if ([self.invitationSendingList containsObject:peerID.displayName]){
-                NSLog(@"送信中のリストから%@を削除", peerID.displayName);
-                [self.invitationSendingList removeObject:peerID.displayName];
-            }
-            
-            // connectedPeerListに接続が完了したpeerIDがあるかを検索
-            // なければconnectedPeerListに追加
-            BOOL isFound = NO;
-            int count = (int)[self.connectedPeerList count];
-            NSLog(@"count is %d", count);
-            for (int i = 0; i < count; i++){
-                MCPeerID *p_id = self.connectedPeerList[i];
-                if ([peerID.displayName isEqualToString: p_id.displayName]){
-                    NSLog(@"%@", p_id.displayName);
-                    isFound = YES;
-                    break;
-                }
-            }
-            if (isFound == NO){
-                [self.connectedPeerList addObject:peerID];
-                NSLog(@"%@を追加", peerID.displayName);
-                
-                    // 他のピアの接続状態が変化したことをViewControllerに通知
-                    [self.delegate sessionConnected:[peerID displayName]];
-            }
-            
-        }else if (state == MCSessionStateNotConnected){
-            NSLog(@"接続が切れた");
-            if (self.selectedPeerID != nil){
-                NSLog(@"%@",self.selectedPeerID.displayName);
-                
-            }else{
-                NSLog(@"self.selectedPeerID is nil");
-            }
-            
-
-            // connectedPeerListに接続が切れたpeerIDがあるかを検索
-            // なければconnectedPeerListから削除
-            int count = (int)[self.connectedPeerList count];
-            NSLog(@"count is %d", count);
-            for (int i = 0; i < count; i++){
-                MCPeerID *p_id = self.connectedPeerList[i];
-
-                if ([peerID.displayName isEqualToString: p_id.displayName]){
-                    
-                    NSLog(@"%@", self.connectedPeerList[i]);
-                    [self.connectedPeerList removeObjectAtIndex:i];
-                    break;
-                }
-            }
-            
-            if ([peerID.displayName isEqualToString: self.selectedPeerID.displayName]){
-                
-                self.selectedPeerID = nil;
-                [self.delegate sessionNotConnected];
-            }
-
-        }
-        else{
-            NSLog(@"その他の接続状態");
-        //sbremoveObject:peerID;
-            
-        }
+        // ステータスが変わったことを知らせる
+        [self.delegate didChangeState:peerID state:state];
     });
 
 }

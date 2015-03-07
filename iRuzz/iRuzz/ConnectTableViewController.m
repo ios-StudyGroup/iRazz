@@ -20,6 +20,8 @@
 @property NSMutableArray *opponentList;     // 対戦相手のリスト
 @property NSMutableDictionary *dataSource;  // これを基にテーブルを作成
 
+@property BOOL isPeersCancel;
+
 
 @end
 
@@ -36,7 +38,11 @@
         
         // cancelボタンを加える
         // cancelボタンを押すと前の画面に戻る
-        self.navigationItem.rightBarButtonItem = [[ UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(canceled)];
+        self.navigationItem.leftBarButtonItem = [[ UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(canceled)];
+        
+        self.navigationItem.rightBarButtonItem = [[ UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh)];
+        
+        
         
         
         SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
@@ -77,10 +83,11 @@
 {
     NSLog(@"%s", __func__);
     
+    self.isPeersCancel = YES;
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
     // デリゲートを設定(GameViewから戻った場合のことを考え、viewDidLoadではなくここで設定)
     sessionHelperSingleton.delegate = self;
-    [sessionHelperSingleton cancelConect];
+//    [sessionHelperSingleton cancelConect];
     
     [self updateDataSource];
 
@@ -102,6 +109,11 @@
     // Top画面の状態でメッセージなどを受け取らないようにするため
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
     [sessionHelperSingleton stopBrowsingAndAdvertising];
+    if (self.isPeersCancel == YES ) // game画面への遷移時はキャンセルしない
+    {
+        // すべてのPeerとの接続をキャンセル
+        [sessionHelperSingleton cancelConect];
+    }
 }
 
 
@@ -117,20 +129,37 @@
 }
 
 /**
+ ナビゲーションのRefreshボタンをタップときに呼ばれる
+*/
+-(void)refresh
+{
+    // 対戦相手を見つける
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];  // 取得
+
+    SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+
+    [sessionHelperSingleton startBrowsiongWithDisplayName:[ud stringForKey:@"displayName"]];
+    [sessionHelperSingleton startAdvertisingWithDisplayName:[ud stringForKey:@"displayName"]];
+
+    [self updateDataSource];
+}
+/**
  DataSourceをアップデートし、テーブルを更新
- DataSourceは、SessionHelperSingletonのconnectedPeerListを基にする
+ DataSourceは、MCSessionのconnectedPeersを基にする
  */
 -(void)updateDataSource
 {
+    NSLog(@"%s", __func__);
+    
     // セルの項目を作成する
     self.opponentList =  [@[@"コンピュータ"] mutableCopy];
     
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
-    [sessionHelperSingleton.connectedPeerList enumerateObjectsUsingBlock:^(MCPeerID *obj, NSUInteger idx, BOOL *stop) {
+    [sessionHelperSingleton.session.connectedPeers enumerateObjectsUsingBlock:^(MCPeerID *obj, NSUInteger idx, BOOL *stop) {
         [self.opponentList addObject:obj.displayName];
     }];
     
-    
+    NSLog(@"%@", self.opponentList);
     // セルの項目をまとめる
     NSArray *datas = [NSArray arrayWithObjects:self.opponentList, nil];
     NSDictionary *dic = [NSDictionary dictionaryWithObjects:datas forKeys:self.sectionList];
@@ -141,19 +170,6 @@
 }
 
 # pragma mark - SessionHelperDelegate methods
--(void)sessionConnected:(NSString *)displayName
-{
-    NSLog(@"%s", __func__);
-    if (![self.opponentList containsObject:displayName]){
-        [self.opponentList addObject:displayName];
-        NSArray *datas = [NSArray arrayWithObjects:self.opponentList, nil];
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:datas forKeys:self.sectionList];
-        self.dataSource = [dic mutableCopy];
-
-        // 更新
-        [self.tableView reloadData];
-    }
-}
 
 
 
@@ -165,6 +181,7 @@
 -(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName
 {
     NSLog(@"%s",__func__);
+    
     
     NSString *storyboardWithName;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
@@ -183,6 +200,10 @@
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
     if ([sessionHelperSingleton setSelectedPeerIDWithDisplayName:displayName]){
         NSLog(@"selectedPeerIDを設定");
+        // displayName以外との接続をキャンセル
+        [sessionHelperSingleton cancelConectWithoutPeer:displayName];
+        self.isPeersCancel = NO;
+
         [self presentViewController:humGameViewController animated:YES completion:nil];
         
     }else{
@@ -200,6 +221,12 @@
     }
 }
 
+-(void)receivedMessage:(NSString *)message
+{
+    NSLog(@"%s", __func__);
+    // 何もしない
+}
+
 /**
  接続相手を見失ったときに呼ばれる
  */
@@ -207,25 +234,15 @@
 {
     NSLog(@"%s", __func__);
     
-    if ([self.opponentList containsObject:displayName]){
-        [self.opponentList removeObject:displayName];
-        NSArray *datas = [NSArray arrayWithObjects:self.opponentList, nil];
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:datas forKeys:self.sectionList];
-        self.dataSource = [dic mutableCopy];
-        
-        // 更新
-        [self.tableView reloadData];
-    }
-    
+    [self updateDataSource];
 }
+
 /**
- 接続が切れたときに呼ばれる
+ 接続状態が変わったときに呼ばれる
  */
--(void)sessionNotConnected
+-(void)didChangeState:(MCPeerID *)peerID state:(MCSessionState)state
 {
     NSLog(@"%s", __func__);
-    
-    // 更新だけしとく
     [self updateDataSource];
     
 }
@@ -346,6 +363,10 @@
                 return;
             }
             
+            // 指定したdisplayName以外との接続をキャンセル
+            [sessionHelperSingleton cancelConectWithoutPeer:[items objectAtIndex:indexPath.row]];
+            self.isPeersCancel = NO;
+
             // Viewの遷移
             UIStoryboard *secondStoryboard = [UIStoryboard storyboardWithName:storyboardWithName bundle:nil];
             HumGameViewController *humGameViewController = [secondStoryboard instantiateViewControllerWithIdentifier:@"PushHumGameScene"];

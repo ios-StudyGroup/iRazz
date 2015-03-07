@@ -17,11 +17,10 @@
 @required
 
 @optional
--(void)sessionConnected:(NSString *)displayName;
 -(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName;
 -(void)receivedMessage:(NSString *)message;
 -(void)lostPeerWithDisplayName:(NSString *)displayName;
--(void)sessionNotConnected;
+-(void)didChangeState:(MCPeerID *)peerID state:(MCSessionState)state;
 
 
 @end
@@ -33,10 +32,8 @@
 
 @property MCSession *session;
 @property MCPeerID *myPeerID;
-@property NSMutableArray *connectedPeerList;    // MCSessionのconnectedPeersを使えばいいのかも
 
 @property MCPeerID *selectedPeerID;
-@property NSString *currentDelegateClassName;
 
 
 @property (nonatomic, weak) id <SessionHelperDelegate> delegate;
@@ -51,6 +48,8 @@
 
 -(BOOL)setSelectedPeerIDWithDisplayName:(NSString *)displayName;
 -(void)cancelConect;
+-(void)cancelConectWithoutPeer:(NSString*)displayName;
+
 
 
 
