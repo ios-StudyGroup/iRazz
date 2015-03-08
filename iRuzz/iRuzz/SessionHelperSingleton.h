@@ -15,13 +15,13 @@
 
 // SessionHelperDelegateで実装が必須なメソッド
 @required
-
-@optional
 -(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName;
 -(void)receivedMessage:(NSString *)message;
 -(void)foundPeer;
--(void)lostPeerWithDisplayName;
+-(void)lostPeer;
 -(void)didChangeState:(MCPeerID *)peerID state:(MCSessionState)state;
+
+@optional
 
 
 @end

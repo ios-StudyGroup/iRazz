@@ -151,6 +151,12 @@
  
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
 
+    [sessionHelperSingleton cancelConect];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [sessionHelperSingleton setPeerIDWithDisplayName:[ud stringForKey:@"displayName"]];
+
+
     [sessionHelperSingleton startBrowsiongWithDisplayName];
     [sessionHelperSingleton startAdvertisingWithDisplayName];
 
@@ -270,7 +276,7 @@
 /**
  接続相手を見失ったときに呼ばれる
  */
--(void)lostPeerWithDisplayName
+-(void)lostPeer
 {
     NSLog(@"%s", __func__);
     [self updateDataSource];
@@ -297,7 +303,7 @@
     }
     
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
-    [sessionHelperSingleton.foungPeerIDList removeAllObjects];
+    [sessionHelperSingleton.foungPeerIDList removeObject:peerID];
     
     [self stopAndRemoveIndicator];
 

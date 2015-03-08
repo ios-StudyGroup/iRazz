@@ -276,7 +276,7 @@ static SessionHelperSingleton *sharedData_ = nil;
         [self.foungPeerIDList removeObject:peerID];
     }
     
-    [self.delegate lostPeerWithDisplayName];
+    [self.delegate lostPeer];
     
 }
 

@@ -483,7 +483,13 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     self.isChangeView = NO;
 }
 
--(void)lostPeerWithDisplayName:(MCPeerID *)peerID
+-(void)foundPeer
+{
+    NSLog(@"%s",__func__);
+    // 何もしない
+    
+}
+-(void)lostPeer
 {
     NSLog(@"%s",__func__);
     // 何もしない
