@@ -14,7 +14,7 @@
 
 @property MCNearbyServiceAdvertiser *nearbyServiceAdvertiser;
 @property MCNearbyServiceBrowser *nearbyServiceBrowser;
-@property NSMutableArray *invitationSendingList;
+//@property NSMutableArray *invitationSendingList;
 
 
 @end
@@ -36,10 +36,12 @@ static SessionHelperSingleton *sharedData_ = nil;
 
 - (id)init
 {
+    NSLog(@"%s",__func__);
     self = [super init];
     if (self) {
         //Initialization
-        self.invitationSendingList = [NSMutableArray array];
+//        self.invitationSendingList = [NSMutableArray array];
+        self.foungPeerIDList = [NSMutableArray array];
     }
     return self;
 }
@@ -52,41 +54,39 @@ static SessionHelperSingleton *sharedData_ = nil;
 -(void)setPeerIDWithDisplayName:(NSString *)displayName
 {
     NSLog(@"%s", __func__);
-    if (self.serviceType == nil){
-        
+//    if (self.serviceType == nil){
+    
         self.myPeerID = [[MCPeerID alloc] initWithDisplayName:displayName];
         self.serviceType = @"irazz-test";
         
         self.session = [[MCSession alloc] initWithPeer:self.myPeerID securityIdentity:nil encryptionPreference:MCEncryptionNone];
         self.session.delegate = self;
-    }
+//    }
+    
+    self.nearbyServiceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:self.myPeerID serviceType:self.serviceType];
+    self.nearbyServiceBrowser.delegate = self;
+
+    self.nearbyServiceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:self.myPeerID discoveryInfo:nil serviceType:self.serviceType];
+    self.nearbyServiceAdvertiser.delegate = self;
+
 }
 
 
 
 
 #pragma mark - Public methods
-- (void)startBrowsiongWithDisplayName:(NSString *)displayName
+- (void)startBrowsiongWithDisplayName
 
 {
     NSLog(@"%s", __func__);
-
-    [self setPeerIDWithDisplayName:displayName];
-    
-    
-    self.nearbyServiceBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:self.myPeerID serviceType:self.serviceType];
-    self.nearbyServiceBrowser.delegate = self;
     
     [self.nearbyServiceBrowser startBrowsingForPeers];
 }
 
--(void)startAdvertisingWithDisplayName:(NSString *)displayName
+-(void)startAdvertisingWithDisplayName
 {
     NSLog(@"%s", __func__);
-    [self setPeerIDWithDisplayName:displayName];
-    
-    self.nearbyServiceAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:self.myPeerID discoveryInfo:nil serviceType:self.serviceType];
-    self.nearbyServiceAdvertiser.delegate = self;
+
     [self.nearbyServiceAdvertiser startAdvertisingPeer];
 
 }
@@ -95,6 +95,8 @@ static SessionHelperSingleton *sharedData_ = nil;
 -(BOOL)sendDeck:(NSData *)deck
 {
     NSLog(@"%s", __func__);
+    NSLog(@"%lu", (unsigned long)[self.session.connectedPeers count]);
+
     NSDictionary *deck_dir = @{@"deck":deck};
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:deck_dir];
 
@@ -125,6 +127,8 @@ static SessionHelperSingleton *sharedData_ = nil;
     NSLog(@"message is %@", message);
 
     NSDictionary *message_dir = @{@"message":message};
+    
+    NSLog(@"%lu", (unsigned long)[self.session.connectedPeers count]);
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:message_dir];
     if (self.selectedPeerID != nil){
         NSError *error;
@@ -148,13 +152,16 @@ static SessionHelperSingleton *sharedData_ = nil;
 }
 
 
--(void)stopBrowsingAndAdvertising
+-(void)stopBrowsing
 {
     NSLog(@"%s", __func__);
-    
     [self.nearbyServiceBrowser stopBrowsingForPeers];
+}
+
+-(void)stopdAvertising
+{
+    NSLog(@"%s", __func__);
     [self.nearbyServiceAdvertiser stopAdvertisingPeer];
-    
 }
 
 -(BOOL)setSelectedPeerIDWithDisplayName:(NSString *)displayName
@@ -188,6 +195,7 @@ static SessionHelperSingleton *sharedData_ = nil;
     for (int i = 0; i < count; i++){
         [self.session cancelConnectPeer:self.session.connectedPeers[i]];
     }
+    [self.session disconnect];
 //    [self.invitationSendingList removeAllObjects];
 }
 /**
@@ -204,6 +212,22 @@ static SessionHelperSingleton *sharedData_ = nil;
     }
 }
 
+/**
+ 招待を送る
+ */
+-(BOOL)sendInvitePeerWithDisplayName:(NSString *)displayName
+{
+    int count = (int)[self.foungPeerIDList count];
+    MCPeerID * peerID = nil;
+    for (int i = 0; i < count; i++){
+        peerID = self.foungPeerIDList[i];
+        if ([displayName isEqualToString:peerID.displayName]){
+            [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:3];
+            return YES;
+        }
+    }
+    return NO;
+}
 
 
 
@@ -214,15 +238,45 @@ static SessionHelperSingleton *sharedData_ = nil;
 {
     NSLog(@"%s",__func__);
     
-    [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:5];
+    int count = (int)[self.foungPeerIDList count];
+    
+    for (int i = 0; i < count; i++){
+        MCPeerID *p_id = self.foungPeerIDList[i];
+        NSLog(@"%@", p_id.displayName);
+        
+        if ([peerID.displayName isEqualToString: p_id.displayName]){
+            [self.foungPeerIDList removeObjectAtIndex:i];
+        }
+    }
+
+    
+    
+    if (![self.foungPeerIDList containsObject:peerID]){
+        NSLog(@"%@ is not contain in foungPeerIDList", peerID);
+        if (![peerID.displayName isEqualToString: self.myPeerID.displayName]){
+            NSLog(@"peerID is no myPeerID");
+            NSLog(@"add peer ID %@", peerID);
+            [self.foungPeerIDList addObject:peerID];            
+        }
+    }
+    
+    NSLog(@"%@", self.foungPeerIDList);
+    
+    [self.delegate foundPeer];
+//    [self.nearbyServiceBrowser invitePeer:peerID toSession:self.session withContext:nil timeout:5];
 }
 
 // A nearby peer has stopped advertising
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     NSLog(@"%s",__func__);
+    if ([self.foungPeerIDList containsObject:peerID]){
+        NSLog(@"remove peer ID %@", peerID);
+
+        [self.foungPeerIDList removeObject:peerID];
+    }
     
-    [self.delegate lostPeerWithDisplayName:peerID.displayName];
+    [self.delegate lostPeerWithDisplayName];
     
 }
 
@@ -238,10 +292,13 @@ static SessionHelperSingleton *sharedData_ = nil;
 
 
 # pragma mark - MCNearbyServiceAdvertiserDelegate methods
+/**
+ 招待を受ける
+ */
 - (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler
 {
     NSLog(@"%s", __func__);
-
+    self.selectedPeerID = peerID;
     invitationHandler(YES, self.session);
 
 }
@@ -310,6 +367,20 @@ static SessionHelperSingleton *sharedData_ = nil;
 {
     NSLog(@"%s", __func__);
     NSLog(@"%@", peerID.displayName);
+    switch (state) {
+        case MCSessionStateConnecting:
+            NSLog(@"MCSessionStateConnecting");
+            break;
+        case MCSessionStateNotConnected:
+            NSLog(@"MCSessionStateNotConnected");
+            break;
+        case MCSessionStateConnected:
+            NSLog(@"MCSessionStateConnected");
+            break;
+            
+        default:
+            break;
+    }
 
     // メインスレッドで処理を実行
     dispatch_async(dispatch_get_main_queue(), ^{

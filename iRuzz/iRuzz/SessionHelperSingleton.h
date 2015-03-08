@@ -19,7 +19,8 @@
 @optional
 -(void)receivedDeck:(Deck *)deck displayName:(NSString *)displayName;
 -(void)receivedMessage:(NSString *)message;
--(void)lostPeerWithDisplayName:(NSString *)displayName;
+-(void)foundPeer;
+-(void)lostPeerWithDisplayName;
 -(void)didChangeState:(MCPeerID *)peerID state:(MCSessionState)state;
 
 
@@ -34,21 +35,27 @@
 @property MCPeerID *myPeerID;
 
 @property MCPeerID *selectedPeerID;
+@property NSMutableArray *foungPeerIDList;
+@property BOOL isHost;
 
 
 @property (nonatomic, weak) id <SessionHelperDelegate> delegate;
 
-
-- (void)startBrowsiongWithDisplayName:(NSString *)displayName;
-- (void)startAdvertisingWithDisplayName:(NSString *)displayName;
+-(void)setPeerIDWithDisplayName:(NSString *)displayName;
+//- (void)startBrowsiongWithDisplayName:(NSString *)displayName;
+//- (void)startAdvertisingWithDisplayName:(NSString *)displayName;
+- (void)startBrowsiongWithDisplayName;
+- (void)startAdvertisingWithDisplayName;
 
 -(BOOL)sendDeck:(NSData *)deck;
 -(BOOL)sendMessage:(NSString *)message;
--(void)stopBrowsingAndAdvertising;
-
+-(void)stopBrowsing;
+-(void)stopdAvertising;
 -(BOOL)setSelectedPeerIDWithDisplayName:(NSString *)displayName;
 -(void)cancelConect;
 -(void)cancelConectWithoutPeer:(NSString*)displayName;
+
+-(BOOL)sendInvitePeerWithDisplayName:(NSString *)displayName;
 
 
 

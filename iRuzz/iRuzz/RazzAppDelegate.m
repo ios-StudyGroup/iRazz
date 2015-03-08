@@ -33,6 +33,9 @@
     
     NSLog(@"%s", __func__);
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    [sessionHelperSingleton stopBrowsing];
+    [sessionHelperSingleton stopdAvertising];
+
     [sessionHelperSingleton sendMessage:@"quit"];
     [sessionHelperSingleton cancelConect];
     
@@ -53,6 +56,8 @@
 {
     NSLog(@"%s",__func__);
     SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
+    [sessionHelperSingleton stopBrowsing];
+    [sessionHelperSingleton stopdAvertising];
     [sessionHelperSingleton cancelConect];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
