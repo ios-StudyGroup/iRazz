@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *pot;
 @property (weak, nonatomic) IBOutlet UILabel *a_bet;
 @property (weak, nonatomic) IBOutlet UILabel *y_bet;
+@property (weak, nonatomic) IBOutlet UILabel *logLabel;
 
 - (IBAction)raise:(id)sender;
 - (IBAction)call:(id)sender;

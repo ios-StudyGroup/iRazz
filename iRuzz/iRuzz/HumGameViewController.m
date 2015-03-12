@@ -8,6 +8,7 @@
 
 #import "HumGameViewController.h"
 #import "SessionHelperSingleton.h"
+#import <AVFoundation/AVFoundation.h>
 
 typedef NS_ENUM(NSUInteger, GAMESTATE) {
     PLAYING,
@@ -44,6 +45,8 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.logLabel.hidden = YES;
+
 
 }
 
@@ -61,6 +64,9 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
 
 - (void)initialStatus
 {
+    
+    self.logLabel.hidden = YES;
+
     // labelのカドを丸くする
     [self setLabel:self.a_card1];
     [self setLabel:self.a_card2];
@@ -509,6 +515,19 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
 {
     NSLog(@"%s", __func__);
     
+    
+    self.logLabel.text = @"Callされました";
+    self.logLabel.hidden = NO;
+    AVSpeechSynthesizer* speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+    // AVSpeechUtteranceを読ませたい文字列で初期化する。
+    NSString* speakingText = @"Callされました";
+    
+    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:speakingText];
+    
+    // AVSpeechSynthesizerにAVSpeechUtteranceを設定して読んでもらう
+    [speechSynthesizer speakUtterance:utterance];
+    
+    [self performSelector:@selector(hiddenLogLabel) withObject:nil afterDelay:2.0];
     NSInteger ybetPrize = self.y_bet.text.integerValue;
     NSInteger abetPrize = self.a_bet.text.integerValue;
     if (abetPrize > ybetPrize) { //ブリングインケース
@@ -534,6 +553,26 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
 
 - (void) receivedRaise {
     NSLog(@"%s", __func__);
+    self.logLabel.text = @"Raiseされました";
+    [self performSelector:@selector(hiddenLogLabel) withObject:nil afterDelay:2.0];
+
+    self.logLabel.hidden = NO;
+    
+    AVSpeechSynthesizer* speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+    // AVSpeechUtteranceを読ませたい文字列で初期化する。
+    NSString* speakingText = @"Raiseされました";
+    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:speakingText];
+    
+    // AVSpeechSynthesizerにAVSpeechUtteranceを設定して読んでもらう
+    [speechSynthesizer speakUtterance:utterance];
+
+
+}
+
+-(void)hiddenLogLabel
+{
+    NSLog(@"%s", __func__);
+    self.logLabel.hidden = YES;
 }
 
 - (void) receivedFold {

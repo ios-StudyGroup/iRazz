@@ -26,6 +26,7 @@
 		6CA9B07819961EEA00A584E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B07719961EEA00A584E6 /* Images.xcassets */; };
 		6CA9B0951996310400A584E6 /* table.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CA9B0941996310400A584E6 /* table.png */; };
 		6CA9B098199636AA00A584E6 /* ComGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CA9B097199636AA00A584E6 /* ComGameViewController.m */; };
+		E51607FD1AB19370002C19F6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51607FC1AB19370002C19F6 /* AVFoundation.framework */; };
 		E56580BD1AA2F315000DF8FE /* HumGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E56580BC1AA2F315000DF8FE /* HumGameViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		6CA9B0941996310400A584E6 /* table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = table.png; sourceTree = "<group>"; };
 		6CA9B096199636AA00A584E6 /* ComGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComGameViewController.h; sourceTree = "<group>"; };
 		6CA9B097199636AA00A584E6 /* ComGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComGameViewController.m; sourceTree = "<group>"; };
+		E51607FC1AB19370002C19F6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		E56580BB1AA2F315000DF8FE /* HumGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumGameViewController.h; sourceTree = "<group>"; };
 		E56580BC1AA2F315000DF8FE /* HumGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HumGameViewController.m; sourceTree = "<group>"; };
 		E566D9451AA874FA00A8412E /* ConnectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectTableViewController.h; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E51607FD1AB19370002C19F6 /* AVFoundation.framework in Frameworks */,
 				6A31971219B6989700AAD4DE /* QuartzCore.framework in Frameworks */,
 				6CA9B06219961EEA00A584E6 /* CoreGraphics.framework in Frameworks */,
 				6CA9B06419961EEA00A584E6 /* UIKit.framework in Frameworks */,
@@ -105,6 +108,7 @@
 		6CA9B05E19961EEA00A584E6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E51607FC1AB19370002C19F6 /* AVFoundation.framework */,
 				6A31971119B6989700AAD4DE /* QuartzCore.framework */,
 				6CA9B05F19961EEA00A584E6 /* Foundation.framework */,
 				6CA9B06119961EEA00A584E6 /* CoreGraphics.framework */,
