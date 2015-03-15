@@ -284,7 +284,7 @@ int int_sort( const void * a , const void * b ) {
     NSInteger threeKCounter = [self count3K_HP4:hand];
     NSInteger fourKCounter = [self count4K_HP4:hand];
     
-    const NSInteger No4K[2][3] = {{-1, HP4_1P, HP4_2P}, { HP4_3K, -1, -1}};
+    const NSInteger No4K[2][3] = {{HP4_0P, HP4_1P, HP4_2P}, { HP4_3K, -1, -1}};
     
     if (fourKCounter == 1) {
         return HP4_4K;
