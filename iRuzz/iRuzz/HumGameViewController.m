@@ -58,16 +58,6 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     
     
     [self initialStatus];
-    [self.raiseButton setEnabled:NO];
-    [self.callButton setEnabled:NO];
-    [self.foldButton setEnabled:NO];
-    NSInteger judge = [self judgeCurrentHand];
-    if (judge == 0) { // 自分が弱い場合
-        [self.raiseButton setEnabled:YES];
-        [self.callButton setEnabled:YES];
-        [self.foldButton setEnabled:YES];
-        NSLog(@"my turn");
-    }
 }
 
 
@@ -92,6 +82,10 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     [self setLabel:self.y_card6];
     [self setLabel:self.y_card7];
     self.state = PLAYING;
+    self.a_card1.backgroundColor = [UIColor blueColor];
+    self.a_card2.backgroundColor = [UIColor blueColor];
+    self.a_card7.backgroundColor = [UIColor blueColor];
+
     
     if (self.isHost == YES) {
         self.a_card1.text = @"";
@@ -171,6 +165,20 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     }
     
     self.isChangeView = YES;
+    
+    [self.raiseButton setEnabled:NO];
+    [self.callButton setEnabled:NO];
+    [self.foldButton setEnabled:NO];
+    NSInteger judge = [self judgeCurrentHand];
+    if (judge == 0) { // 自分が弱い場合
+        [self.raiseButton setEnabled:YES];
+        [self.callButton setEnabled:YES];
+        [self.foldButton setEnabled:YES];
+    } else {
+        [self.raiseButton setEnabled:NO];
+        [self.callButton setEnabled:NO];
+        [self.foldButton setEnabled:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning
