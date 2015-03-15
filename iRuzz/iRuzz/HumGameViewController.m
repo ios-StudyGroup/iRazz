@@ -58,7 +58,16 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     
     
     [self initialStatus];
-
+    [self.raiseButton setEnabled:NO];
+    [self.callButton setEnabled:NO];
+    [self.foldButton setEnabled:NO];
+    NSInteger judge = [self judgeCurrentHand];
+    if (judge == 0) { // 自分が弱い場合
+        [self.raiseButton setEnabled:YES];
+        [self.callButton setEnabled:YES];
+        [self.foldButton setEnabled:YES];
+        NSLog(@"my turn");
+    }
 }
 
 
@@ -197,7 +206,9 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
         return;
     }
     
-    [sender setEnabled:NO];
+    [self.raiseButton setEnabled:NO];
+    [self.callButton setEnabled:NO];
+    [self.foldButton setEnabled:NO];
     
     if (self.y_card5.hidden == YES) { /* 4th street までは raise額5 */
         NSInteger abetPrize = self.a_bet.text.integerValue;
@@ -223,8 +234,6 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     
     [self commitPot];
     [self loadNextCard];
-
-    [sender setEnabled:YES];
 }
 
 - (IBAction)call:(id)sender
@@ -240,7 +249,9 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     if (self.state == END) { /* 最後まで盤面が進んでいれば無効化 */
         return;
     }
-    [sender setEnabled:NO];
+    [self.raiseButton setEnabled:NO];
+    [self.callButton setEnabled:NO];
+    [self.foldButton setEnabled:NO];
 
     
     //とりあえずcallを投げてみる
@@ -261,16 +272,21 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     
     NSInteger ybetPrize = self.y_bet.text.integerValue;
     NSInteger abetPrize = self.a_bet.text.integerValue;
-    if (abetPrize > ybetPrize) { //一致しない場合は合わせる(ブリングインの時は、一致しないけど、合わせない）
+    if (abetPrize > ybetPrize) { //一致しない場合は合わせる
         ybetPrize = abetPrize;
         self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
         [self commitPot];
         [self loadNextCard];
+    } else if (abetPrize < ybetPrize) {
+        // ブリングインのときなので、することはない。
+    } else { // 0枚でコールする場合
+        NSInteger judge = [self judgeCurrentHand];
+        if ((judge == 0) ||
+            ((judge == 2) && (self.isHost == YES))) { // 自分が弱いか、引き分けで相手からの場合
+            [self commitPot];
+            [self loadNextCard];
+        }
     }
-    
-
-    [sender setEnabled:YES];
 }
 
 - (IBAction)fold:(id)sender
@@ -329,28 +345,50 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     [[label layer] setBorderWidth:1.0];
 }
 
+/*
+ * 自分のターンか判断し、自分のターンであれば、ボタンを有効化。
+ */
+- (void) judgeTurn
+{
+    NSInteger judge = [self judgeCurrentHand];
+    if ((judge == 1) ||
+        ((judge == 2) && (self.isHost == NO))) { // 自分が強いか、引き分けで自分からの場合
+        [self.raiseButton setEnabled:YES];
+        [self.callButton setEnabled:YES];
+        [self.foldButton setEnabled:YES];
+        NSLog(@"my turn");
+    }
+}
+
 - (void) loadNextCard
 {
     NSLog(@"%s",__func__);
+    [self.raiseButton setEnabled:NO];
+    [self.callButton setEnabled:NO];
+    [self.foldButton setEnabled:NO];
 
     if (self.y_card4.hidden == YES) {
         self.y_card4.hidden = NO;
         self.a_card4.hidden = NO;
+        [self judgeTurn];
         return;
     };
     if (self.y_card5.hidden == YES) {
         self.y_card5.hidden = NO;
         self.a_card5.hidden = NO;
+        [self judgeTurn];
         return;
     };
     if (self.y_card6.hidden == YES) {
         self.y_card6.hidden = NO;
         self.a_card6.hidden = NO;
+        [self judgeTurn];
         return;
     };
     if (self.y_card7.hidden == YES) {
         self.y_card7.hidden = NO;
         self.a_card7.hidden = NO;
+        [self judgeTurn];
         return;
     };
     if (self.y_card7.hidden == NO) { /* showdown */
@@ -397,6 +435,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
          ];
         [alert show];
         self.state = END; /* ゲーム終了状態へ遷移 */
+        [self.foldButton setEnabled:YES];
 
         return;
     };
@@ -416,8 +455,9 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
 
 /*
  * @retval    0     aのハンドが強い ex a=2 b=5
- * @retval    1     bのハンドが強い ex a=T b=A
+ * @retval    1     yのハンドが強い ex a=T b=A
  * @retval    2     引き分け(とりあえずなし）
+ * @retval   -1     エラー
 */
 - (NSInteger) judgeCurrentHand
 {
@@ -436,29 +476,40 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
         }
         return [a_card3 judgeRazzCardA:a_card3 CardB:y_card3];
     }
-    if (self.y_card5.hidden == YES) {
 
-        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], nil];
-        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], nil];
+    NSArray *handA = nil;
+    NSArray *handY = nil;
     
-        RazzHand *russHand = [[RazzHand alloc] init];
-        return [russHand judgeHandA:handA HandB:handY];
+    if (self.y_card5.hidden == YES) {
+        if (self.isHost == YES) {
+            handA = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], nil];
+            handY = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], nil];
+        } else {
+            handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], nil];
+            handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], nil];
+        }
+    } else if (self.y_card6.hidden == YES) {
+        if (self.isHost == YES) {
+            handA = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], nil];
+            handY = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], nil];
+        } else {
+            handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], nil];
+            handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], nil];
+        }
+    } else if ((self.y_card7.hidden == YES) ||
+               ((self.y_card7.hidden == NO) && ([self.a_card7.text isEqualToString:@""] == YES))) {
+        if (self.isHost == YES) {
+            handA = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], nil];
+            handY = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], nil];
+        } else {
+            handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], nil];
+            handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], nil];
+        }
     }
-    if (self.y_card6.hidden == YES) {
-        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], nil];
-        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], nil];
-        
-        RazzHand *russHand = [[RazzHand alloc] init];
-        return [russHand judgeHandA:handA HandB:handY];
-    }
-    if (self.y_card7.hidden == YES) {
-        NSArray *handA = [NSArray arrayWithObjects:[self.deck getCard:5], [self.deck getCard:7], [self.deck getCard:9], [self.deck getCard:11], nil];
-        NSArray *handY = [NSArray arrayWithObjects:[self.deck getCard:4], [self.deck getCard:6], [self.deck getCard:8], [self.deck getCard:10], nil];
-        
-        RazzHand *russHand = [[RazzHand alloc] init];
-        return [russHand judgeHandA:handA HandB:handY];
-    }
-    return -1;
+    RazzHand *russHand = [[RazzHand alloc] init];
+    NSInteger result = [russHand judgeHandA:handA HandB:handY];
+    NSLog(@"%s return judge = %d", __func__, result);
+    return result;
 }
 
 # pragma mark - SessionHelperDelegate methods
@@ -474,7 +525,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
         [self receivedFold];
     } else if ([message isEqualToString:@"nextGame"] == YES) {
         [self receivedNextGame];
-    }else if ([message isEqualToString:@"quit"] == YES) {
+    } else if ([message isEqualToString:@"quit"] == YES) {
         [self receivedQuit];
     }
 }
@@ -530,12 +581,24 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     [self performSelector:@selector(hiddenLogLabel) withObject:nil afterDelay:2.0];
     NSInteger ybetPrize = self.y_bet.text.integerValue;
     NSInteger abetPrize = self.a_bet.text.integerValue;
-    if (abetPrize > ybetPrize) { //ブリングインケース
-        // なにもしなくていい
-        NSLog(@"bring in");
+    if (self.y_card4.hidden == YES) { // 3rd street
+        if (abetPrize > ybetPrize) { // ブリングインでコールで帰ってきた
+            [self.raiseButton setEnabled:YES];
+            [self.callButton setEnabled:YES];
+            [self.foldButton setEnabled:YES];
+        } else {
+            abetPrize = ybetPrize;
+            // メインスレッドで処理を実行
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
+                [self commitPot];
+                [self loadNextCard];
+            });
+        }
     } else { // 4th以降の場合
-        if (([self judgeCurrentHand] == 0)      // 自分から動作開始の場合
-            || (self.y_card4.hidden == YES)) {  // ブリングインで、コールで帰ってきた時
+        NSInteger judge = [self judgeCurrentHand];
+        if ((judge == 1) ||
+            ((judge == 2) && (self.isHost == NO))) { // 自分が強いか、引き分けで自分からの場合
             NSLog(@"goto next");
             abetPrize = ybetPrize;
             // メインスレッドで処理を実行
@@ -545,8 +608,9 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
                 [self loadNextCard];
             });
         } else { // 相手から動作開始の場合
-            // 入力をするようにしましょう
-            NSLog(@"wait input");
+            [self.raiseButton setEnabled:YES];
+            [self.callButton setEnabled:YES];
+            [self.foldButton setEnabled:YES];
         }
     }
 }

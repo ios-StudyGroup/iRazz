@@ -174,19 +174,7 @@ bet, raise max: 1bet,1raise</string>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="raise:" destination="Rur-Q9-D09" eventType="touchUpInside" id="c3U-yj-wZA"/>
-                                    <action selector="raise:" destination="BPX-tv-2lp" eventType="touchUpInside" id="r46-ZS-63Z"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QUx-QZ-454">
-                                <rect key="frame" x="734" y="700" width="75" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Call"/>
-                                <connections>
-                                    <action selector="call:" destination="Rur-Q9-D09" eventType="touchUpInside" id="UIQ-5m-mcq"/>
-                                    <action selector="call:" destination="BPX-tv-2lp" eventType="touchUpInside" id="i7G-I7-PdV"/>
+                                    <action selector="raise:" destination="Rur-Q9-D09" eventType="touchUpInside" id="i9d-hO-4IK"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="okP-gB-kdz">
@@ -198,8 +186,7 @@ bet, raise max: 1bet,1raise</string>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="fold:" destination="BPX-tv-2lp" eventType="touchUpInside" id="J7c-WW-zUP"/>
-                                    <action selector="fold:" destination="Rur-Q9-D09" eventType="touchUpInside" id="scT-pR-xV4"/>
+                                    <action selector="fold:" destination="Rur-Q9-D09" eventType="touchUpInside" id="Rs4-B3-U8O"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player A" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ubd-sx-w67">
@@ -311,6 +298,16 @@ bet, raise max: 1bet,1raise</string>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QUx-QZ-454">
+                                <rect key="frame" x="735" y="700" width="75" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Call"/>
+                                <connections>
+                                    <action selector="call:" destination="Rur-Q9-D09" eventType="touchUpInside" id="xii-gG-ZtD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -324,8 +321,11 @@ bet, raise max: 1bet,1raise</string>
                         <outlet property="a_card5" destination="rkk-el-fsI" id="Ve9-ky-Cqn"/>
                         <outlet property="a_card6" destination="S04-7D-2yt" id="6OM-ri-MIc"/>
                         <outlet property="a_card7" destination="8HY-4p-Zox" id="Dr9-u3-f2L"/>
+                        <outlet property="callButton" destination="QUx-QZ-454" id="GLl-xq-gCG"/>
+                        <outlet property="foldButton" destination="okP-gB-kdz" id="ZUX-f7-hbw"/>
                         <outlet property="logLabel" destination="DYO-iL-ljQ" id="dqa-FS-Tad"/>
                         <outlet property="pot" destination="59c-Zr-BMU" id="5yK-Re-Wby"/>
+                        <outlet property="raiseButton" destination="KO4-hd-GYy" id="0Kn-En-MkD"/>
                         <outlet property="y_bet" destination="ycz-Li-OHd" id="0RI-uM-NHn"/>
                         <outlet property="y_card1" destination="Vfv-bm-zS6" id="q7W-TO-WxA"/>
                         <outlet property="y_card2" destination="8Or-gt-Xxp" id="dvr-Oa-TfL"/>

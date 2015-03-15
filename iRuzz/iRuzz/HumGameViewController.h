@@ -36,6 +36,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *y_bet;
 @property (weak, nonatomic) IBOutlet UILabel *logLabel;
 
+@property (weak, nonatomic) IBOutlet UIButton *callButton;
+@property (weak, nonatomic) IBOutlet UIButton *raiseButton;
+@property (weak, nonatomic) IBOutlet UIButton *foldButton;
+
+
 - (IBAction)raise:(id)sender;
 - (IBAction)call:(id)sender;
 - (IBAction)fold:(id)sender;
