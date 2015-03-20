@@ -68,6 +68,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
 {
     
     self.logLabel.hidden = YES;
+    [self.foldButton setTitle:@"Fold" forState:UIControlStateNormal];
 
     // labelのカドを丸くする
     [self setLabel:self.a_card1];
@@ -240,27 +241,18 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
         
     }
     
-    if (self.y_card5.hidden == YES) { /* 4th street までは raise額5 */
-        NSInteger abetPrize = self.a_bet.text.integerValue;
-        NSInteger ybetPrize = abetPrize + 5;
-        self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
-//        if (abetPrize != ybetPrize) { //一致しない場合はコール
-//            abetPrize = ybetPrize;
-//        }
-//        self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
-//        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
-    } else { /* 4th street 以降は raise額10 */
-        NSInteger abetPrize = self.a_bet.text.integerValue;
-        NSInteger ybetPrize = abetPrize + 10;
-        self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
-//        if (abetPrize != ybetPrize) { //一致しない場合はコール
-//            abetPrize = ybetPrize;
-//        }
-//        self.a_bet.text = [NSString stringWithFormat:@"%ld", (long)abetPrize];
-//        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+    NSInteger ybetPrize = self.y_bet.text.integerValue;
+    NSInteger abetPrize = self.a_bet.text.integerValue;
+    if ((self.y_card4.hidden == YES) && (self.raiseCount == 1)) { /* 3rd street のブリングインは特殊 */
+        ybetPrize = ybetPrize + 5;
     }
+    else if (self.y_card5.hidden == YES) { /* 4th street まで は raise額5 */
+        ybetPrize = abetPrize + 5;
+    } else { /* 4th street 以降は raise額10 */
+        ybetPrize = abetPrize + 10;
+    }
+    self.y_bet.text = [NSString stringWithFormat:@"%ld", (long)ybetPrize];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
 }
 
 - (IBAction)call:(id)sender
@@ -461,7 +453,11 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
          cancelButtonTitle:nil
          otherButtonTitles:@"OK", nil
          ];
+        [self.foldButton setTitle:@"End" forState:UIControlStateNormal];
+
         [alert show];
+        
+        
         self.state = END; /* ゲーム終了状態へ遷移 */
         [self.foldButton setEnabled:YES];
 
@@ -536,7 +532,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     }
     RazzHand *russHand = [[RazzHand alloc] init];
     NSInteger result = [russHand judgeHandA:handA HandB:handY];
-    NSLog(@"%s return judge = %ld", __func__, result);
+    NSLog(@"%s return judge = %d", __func__, result);
     return result;
 }
 
@@ -602,6 +598,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     NSString* speakingText = @"Callされました";
     
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:speakingText];
+    [utterance setPitchMultiplier:0.75];
     
     // AVSpeechSynthesizerにAVSpeechUtteranceを設定して読んでもらう
     [speechSynthesizer speakUtterance:utterance];
