@@ -330,6 +330,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
         SessionHelperSingleton *sessionHelperSingleton = [SessionHelperSingleton sharedManager];
         [sessionHelperSingleton sendMessage:@"nextGame"];
         
+        //TODO ここでホストとクライアントの持ち札をあわせないといけない
         self.deck = [[Deck alloc] init];
         [self initialStatus];
         
@@ -623,6 +624,7 @@ typedef NS_ENUM(NSUInteger, GAMESTATE) {
     } else { // 4th以降の場合
         NSInteger judge = [self judgeCurrentHand];
         if ((judge == 1) ||
+            ((judge == 0) && (abetPrize < ybetPrize)) || // レイズしてコールで返ってくる場合
             ((judge == 2) && (self.isHost == NO))) { // 自分が強いか、引き分けで自分からの場合
             NSLog(@"goto next");
             abetPrize = ybetPrize;
